@@ -10,7 +10,7 @@ while (True):
     success, frame = capture.read()
 
     if success:
-        cv2.imwrite(f'FramesToConvertToAscii/frame_{frameNr}.jpg', frame)
+        cv2.imwrite(f'FramesToConvertToAscii/{frameNr}.jpg', frame)
 
     else:
         break
