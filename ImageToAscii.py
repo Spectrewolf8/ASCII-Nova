@@ -1,6 +1,9 @@
 from PIL import Image
 
-ascii_characters_by_surface = "./"  # "`^\",:;Il!i~+_-?][}{1)(|\\/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$"
+ascii_characters_by_surface = "./"
+
+
+# ascii_characters_by_surface = "`^\",:;Il!i~+_-?][}{1)(|\\/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$"
 
 
 def convert_to_ascii_art(image):
@@ -25,18 +28,9 @@ def convert_pixel_to_character(pixel):
     return ascii_characters_by_surface[index]
 
 
-def save_as_text(ascii_art, destinationPath):
-    with open(destinationPath, "w") as file:
-        for line in ascii_art:
-            file.write(line)
-            file.write('\n')
-        file.close()
-
-
-def convertImageToAscii(filepath, destinationPath):
+def convert_Image_To_Ascii(filepath, videoDimensions):
     image = Image.open(filepath)
     # you can first resize the image if needed
-    image = image.resize((68, 36))
+    image = image.resize(videoDimensions)
     ascii_art = convert_to_ascii_art(image)
     return ascii_art
-    # save_as_text(ascii_art, destinationPath)
