@@ -1,11 +1,10 @@
 import cv2
 
-
 capture = cv2.VideoCapture('BadAppleForPython.mp4')
 
 frameNr = 0
 
-while (True):
+while True:
 
     success, frame = capture.read()
 

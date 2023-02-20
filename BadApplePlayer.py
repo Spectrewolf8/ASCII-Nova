@@ -28,7 +28,7 @@ for frame in frames:
     # pyperclip.copy(wholeFrame)
     # pyautogui.hotkey('ctrl', 'v')
     # pyautogui.press('enter')
-
+    time.sleep(0.020982)
     print(wholeFrame)
 
 final_time = time.time()
