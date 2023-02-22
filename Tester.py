@@ -20,9 +20,8 @@ background_colour = (30, 30, 30)
 text_colour = (255, 255, 255)
 
 # screen = pygame.display.set_mode((1024, 768), pygame.RESIZABLE, vsync=1)
-SCREEN_WIDTH = 800
-SCREEN_HEIGHT = 600
-screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN, HWSURFACE | DOUBLEBUF | RESIZABLE)
+window_width, window_height = screen_width - 10, screen_height - 50
+screen = pygame.display.set_mode((window_width, window_height), HWSURFACE | DOUBLEBUF | RESIZABLE)
 pygame.display.set_caption('BadApplePlayer')
 screen.fill(background_colour)
 pygame.display.flip()
@@ -71,13 +70,13 @@ def mainloop():
         # screen.blit(textToRender, textToRender.get_rect(center=(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)))
         wholeFrame = ""
         for ascii_rowns in imageToAscii.convert_Image_To_Ascii(("FramesToConvertToAscii/" + frames[i]),
-                                                               (round(110), round(80))):
+                                                               (round(210), round(180))):
             wholeFrame += "\n" + ascii_rowns
         asciiFramesBuffer.append(wholeFrame)
         message2 = wholeFrame
 
-        ptext.draw(wholeFrame, (500, 100), fontname="courier.ttf", fontsize=12,
-                   lineheight=0.7, color=text_colour)
+        ptext.draw_in_exact_center(wholeFrame, screen, (0, 0), fontname="courier.ttf", fontsize=10,
+                                   lineheight=0.4, color=text_colour)
         # print_multiline_text(screen, message2, (0, 10), ascii_render_font)
         print(wholeFrame)
         print("frame#", i)

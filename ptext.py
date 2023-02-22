@@ -959,6 +959,17 @@ def draw(text, pos=None, **kwargs):
     return tsurf, pos
 
 
+def draw_in_exact_center(text, screen, pos=None, **kwargs):
+    options = _DrawOptions(pos=pos, **kwargs)
+    tsurf = getsurf(text, **options.togetsurfoptions())
+    pos = _blitpos(options.angle, options.pos, options.anchor, tsurf.get_size(), text)
+    if options.surf is not None:
+        options.surf.blit(tsurf, tsurf.get_rect(center=screen.get_rect().center))
+    if AUTO_CLEAN:
+        clean()
+    return tsurf, pos
+
+
 def drawbox(text, rect, **kwargs):
     options = _DrawboxOptions(**kwargs)
     rect = pygame.Rect(rect)
