@@ -1,6 +1,6 @@
 from PIL import Image
 
-ascii_characters_by_surface = "./"
+ascii_characters_by_surface = ".@"
 
 
 # ascii_characters_by_surface = "`^\",:;Il!i~+_-?][}{1)(|\\/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$"

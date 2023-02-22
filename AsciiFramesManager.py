@@ -20,7 +20,7 @@ asciiFramesBuffer = []
 for frame in frames:
     wholeFrame = ""
     for ascii_rowns in imageToAscii.convert_Image_To_Ascii(("FramesToConvertToAscii/" + frame),
-                                                           (round(48), round(36))):
+                                                           (round(60), round(30))):
         wholeFrame += "\n" + ascii_rowns
     asciiFramesBuffer.append(wholeFrame)
 
