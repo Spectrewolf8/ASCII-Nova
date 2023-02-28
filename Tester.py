@@ -1,3 +1,5 @@
+import json
+
 import pygame
 from pygame import DOUBLEBUF, RESIZABLE, HWSURFACE, QUIT, display
 
@@ -59,6 +61,12 @@ asciiFramesBuffer = []
 
 ptext.draw("hello world", centery=50, right=300)
 
+with open('Test.json', 'r') as openfile:
+    # Reading from json file
+    json_object = json.load(openfile)
+
+print(json_object)
+jsonFrames = json_object['frames']
 
 def mainloop():
     i = 0
@@ -68,23 +76,23 @@ def mainloop():
         screen.fill(background_colour)  # filling background on resize
         # textToRender = ascii_render_font.render(str(message), True, (255, 255, 255))
         # screen.blit(textToRender, textToRender.get_rect(center=(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)))
-        wholeFrame = ""
-        for ascii_rowns in imageToAscii.convert_Image_To_Ascii(("FramesToConvertToAscii/" + frames[i]),
-                                                               (round(210), round(180))):
-            wholeFrame += "\n" + ascii_rowns
-        asciiFramesBuffer.append(wholeFrame)
-        message2 = wholeFrame
+        # wholeFrame = ""
+        # for ascii_rowns in imageToAscii.convert_Image_To_Ascii(("FramesToConvertToAscii/" + frames[i]),
+        #                                                        (round(110), round(80))):
+        #     wholeFrame += "\n" + ascii_rowns  # splitting lines onto next lines
+        # asciiFramesBuffer.append(wholeFrame)
+        # message2 = wholeFrame
 
-        ptext.draw_in_exact_center(wholeFrame, screen, (0, 0), fontname="courier.ttf", fontsize=10,
-                                   lineheight=0.4, color=text_colour)
+        ptext.draw_in_exact_center(str(jsonFrames[i]), screen, (0, 0), fontname="courier.ttf", fontsize=20,
+                                   lineheight=0.9, color=text_colour)
         # print_multiline_text(screen, message2, (0, 10), ascii_render_font)
-        print(wholeFrame)
+        print(jsonFrames[i])
         print("frame#", i)
         clock.tick(FPS_LOCK_VALUE)  # making fps constant 30
         show_fps()  # to display fps in top left
         display.flip()  # to update display
 
-        if i >= len(frames):
+        if i >= len(jsonFrames):
             break
         i += 1
         for event in pygame.event.get():
