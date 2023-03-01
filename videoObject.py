@@ -1,7 +1,16 @@
 import os
 
+import cv2
+
 
 class VideoObject:
-    def __init__(self, path):
+    def __init__(self, path, renderTextWidth, renderTextHeight):
+        self.path = path
         self.filename = os.path.basename(path)
-        self.numberOfFrames = int(cv2.VideoCapture(path).get(cv2.CAP_PROP_FRAME_COUNT))
+        cap = cv2.VideoCapture(path)
+        self.numberOfFrames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+        self.fps = float(cap.get(cv2.CAP_PROP_FPS))
+        self.frames = []
+        self.renderChars = ''
+        self.renderTextWidth = int(renderTextWidth)
+        self.renderTextHeight = int(renderTextHeight)
