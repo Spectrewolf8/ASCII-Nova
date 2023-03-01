@@ -24,9 +24,8 @@ running = True
 
 clock = pygame.time.Clock()
 
-FPS_LOCK_VALUE = 30
 
-
+7
 
 def show_fps():
     fps_text = str(int(clock.get_fps()))
@@ -34,7 +33,8 @@ def show_fps():
     screen.blit(fps_surface, fps_surface.get_rect())
 
 
-def mainloop():
+def renderFramesOnScreen(asciiVideoJson):
+    FPS_LOCK_VALUE = asciiVideoJson['fps']
     i = 0
     # game loop
     while running:
@@ -42,10 +42,11 @@ def mainloop():
         screen.fill(background_colour)  # filling background on resize
         # textToRender = ascii_render_font.render(str(message), True, (255, 255, 255))
         # screen.blit(textToRender, textToRender.get_rect(center=(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)))
+        if i < len(asciiVideoJson['totalFrames']):
+            ptext.draw_in_exact_center(asciiVideoJson['totalFrames'][i], screen, (500, 100), fontname="courier.ttf", fontsize=12,
+                                       lineheight=0.7,width=10,color=(255, 255, 255))
 
-        ptext.draw_in_exact_center(message, screen, (500, 100), fontname="courier.ttf", fontsize=12,
-                                   lineheight=0.7, color=(255, 255, 255))
-
+        i += 1
         clock.tick(FPS_LOCK_VALUE)  # making fps constant 30
         show_fps()  # to display fps in top left
         display.flip()  # to update display
@@ -57,4 +58,4 @@ def mainloop():
                 display.quit()
 
 
-mainloop()
+

@@ -21,7 +21,7 @@ def renderVideoToAsciiJson(videoObject):
             break
         wholeFrame = ""
         for ascii_rowns in imageToAscii.convert_Image_To_Ascii(f'temp/{frameNr}.jpg',
-                                                               (round(60), round(30))):
+                                                               (round(96), round(72))):
             wholeFrame += "\n" + ascii_rowns  # splitting lines onto next lines
         asciiFramesBuffer.append(wholeFrame)
         os.remove(f'temp/{frameNr}.jpg')
