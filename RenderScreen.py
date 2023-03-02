@@ -56,6 +56,3 @@ def renderFramesOnScreen(asciiVideoJson):
             # Check for QUIT event
             if event.type == QUIT:
                 display.quit()
-
-
-
