@@ -7,6 +7,7 @@ import json
 import math
 import os
 import shlex
+import shutil
 import subprocess
 from optparse import OptionParser
 
@@ -111,7 +112,9 @@ def split_by_seconds(filename, split_length, vcodec="copy", acodec="copy",
             split_start = 0
         else:
             split_start = split_length * n
-        # messed filebase here to save files split in temp/ directory
+
+        # tweaked some directory settings here to save files split in temp/ directory
+
         split_args += ["-ss", str(split_start), "-t", str(split_length),
                        ('temp/' + os.path.basename(filebase)) + "-" + str(n + 1) + "-of-" +
                        str(split_count) + "." + fileext]
@@ -217,6 +220,10 @@ def main():
                 options.split_length = int(split_filesize / float(file_size) * video_length)
         if not options.split_length:
             bailout()
+        # recreating temp directory to clear everything from last session before splitting video\
+        if os.path.exists('temp'):
+            shutil.rmtree('temp')
+        os.mkdir('temp')
         split_by_seconds(video_length=video_length, **options.__dict__)
 
 
