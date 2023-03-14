@@ -1,34 +1,84 @@
 import os
+import shutil
+from concurrent.futures import ThreadPoolExecutor
 import cv2
-import ImageToAscii as imageToAscii
-from videoObject import VideoObject
+from natsort import natsort
+import ImageToAscii
 import compress_json
 
 
 def renderVideoToAsciiJson(videoObject):
-    capture = cv2.VideoCapture(videoObject.path)
+    renderedFrames = []
+    numberOfThreads = 64
+    submittedThreads = []
 
-    frameNr = 0
+    splitVideoIntoFrames(videoObject)
+
+    threadPool = ThreadPoolExecutor(numberOfThreads)
+    tempFrames = os.listdir("temp")
+    tempFrames = natsort.natsorted(tempFrames, reverse=False)
+
+    frameChunks = splitFramesList(tempFrames, numberOfThreads)
+
+    x = 0
+    while x < len(frameChunks):
+        submittedThreads.append(
+
+            threadPool.submit(renderFramesToAscii, frameChunks[x], videoObject.renderTextWidth,
+                              videoObject.renderTextHeight))
+        x += 1
+
+    print(submittedThreads)
+
+    for x in submittedThreads:
+        renderedFrames.extend(x.result())
+
+    print(len(renderedFrames))
+    videoObject.frames = renderedFrames
+    makeJsonGzip(videoObject)
+
+
+def renderFramesToAscii(submittedFrames, renderTextWidth, renderTextHeight):
+    print(submittedFrames)
     asciiFramesBuffer = []
-    while True:
+    for frame in submittedFrames:
+        print('current frame', frame)
 
-        success, frame = capture.read()
-        print(type(frame), frame)
-
-        if success:
-            cv2.imwrite(f'temp/{frameNr}.jpg', frame)
-        else:
-            break
         wholeFrame = ""
-        for ascii_rowns in imageToAscii.convert_Image_To_Ascii(f'temp/{frameNr}.jpg',
-                                                               (round(96), round(72))):
+        for ascii_rowns in ImageToAscii.convert_Image_To_Ascii(f'temp/' + frame,
+                                                               (round(renderTextWidth),
+                                                                round(renderTextHeight))):
             wholeFrame += "\n" + ascii_rowns  # splitting lines onto next lines
         asciiFramesBuffer.append(wholeFrame)
-        os.remove(f'temp/{frameNr}.jpg')
-    capture.release()
-    videoObject.frames = asciiFramesBuffer
-    makeJsonGzip(videoObject)
+        os.remove(f'temp/' + frame)
     return asciiFramesBuffer
+
+
+def splitVideoIntoFrames(videoObject):
+    print("Splitting Frames")
+    # recreating temp directory to clear everything from last session
+    if os.path.exists('temp'):
+        shutil.rmtree('temp')
+    os.mkdir('temp')
+    capture = cv2.VideoCapture(videoObject.path)
+    frameNr = 0
+    while True:
+        success, frame = capture.read()
+        print(type(frame), frame)
+        if success:
+            cv2.imwrite(f'temp/{frameNr}.jpg', frame)
+
+        else:
+            break
+        frameNr = frameNr + 1
+    capture.release()
+    print("frames split")
+
+
+def splitFramesList(framesList, number_of_parts_to_split_in=1):
+    length = len(framesList)
+    return [framesList[i * length // number_of_parts_to_split_in: (i + 1) * length // number_of_parts_to_split_in]
+            for i in range(number_of_parts_to_split_in)]
 
 
 def makeJsonGzip(videoObjectToWrite):

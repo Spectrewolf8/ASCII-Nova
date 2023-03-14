@@ -220,10 +220,10 @@ def main():
                 options.split_length = int(split_filesize / float(file_size) * video_length)
         if not options.split_length:
             bailout()
-        # recreating temp directory to clear everything from last session before splitting video\
-        if os.path.exists('temp'):
-            shutil.rmtree('temp')
-        os.mkdir('temp')
+            # recreating temp directory to clear everything from last session before splitting video\
+            if os.path.exists('temp'):
+                shutil.rmtree('temp')
+            os.mkdir('temp')
         split_by_seconds(video_length=video_length, **options.__dict__)
 
 

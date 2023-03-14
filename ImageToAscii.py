@@ -13,7 +13,7 @@ def convert_to_ascii_art(image):
         line = ''
         for x in range(0, width - 1):
             px = image.getpixel((x, y))
-            # print(px)
+            #print(px)
             line += convert_pixel_to_character(px)
         ascii_art.append(line)
     return ascii_art
