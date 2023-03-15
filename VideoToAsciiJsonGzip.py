@@ -6,10 +6,11 @@ from natsort import natsort
 import ImageToAscii
 import compress_json
 
+import Tester
 
-def renderVideoToAsciiJson(videoObject):
+
+def renderVideoToAsciiJson(videoObject, numberOfThreads=1):
     renderedFrames = []
-    numberOfThreads = 64
     submittedThreads = []
 
     splitVideoIntoFrames(videoObject)
@@ -43,13 +44,13 @@ def renderFramesToAscii(submittedFrames, renderTextWidth, renderTextHeight):
     asciiFramesBuffer = []
     for frame in submittedFrames:
         print('current frame', frame)
-
-        wholeFrame = ""
-        for ascii_rowns in ImageToAscii.convert_Image_To_Ascii(f'temp/' + frame,
-                                                               (round(renderTextWidth),
-                                                                round(renderTextHeight))):
-            wholeFrame += "\n" + ascii_rowns  # splitting lines onto next lines
-        asciiFramesBuffer.append(wholeFrame)
+        #
+        # wholeFrame = ""
+        # for ascii_rowns in ImageToAscii.convert_Image_To_Ascii(f'temp/' + frame,
+        #                                                        (round(renderTextWidth),
+        #                                                         round(renderTextHeight))):
+        #     wholeFrame += "\n" + ascii_rowns  # splitting lines onto next lines
+        asciiFramesBuffer.append(ImageToAscii.convert_Image_To_Ascii(f'temp/' + frame))
         os.remove(f'temp/' + frame)
     return asciiFramesBuffer
 

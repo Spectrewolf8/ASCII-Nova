@@ -4,7 +4,7 @@ import pygame
 import RenderScreen
 
 gzippedJsonfile_path = "BadAppleForPython2.json.gz"  # change to your own video path
-asciiVideoJson = compress_json.load("BadAppleForPython2.json.gz")
+asciiVideoJson = compress_json.load(gzippedJsonfile_path)
 
 FPS_LOCK_VALUE = asciiVideoJson['fps']
 clock = pygame.time.Clock()

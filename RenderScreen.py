@@ -1,7 +1,7 @@
 import pygame
 from pygame import DOUBLEBUF, RESIZABLE, HWSURFACE, QUIT, display
-
 import ptext
+
 
 pygame.init()
 pygame.font.init()
@@ -24,8 +24,8 @@ running = True
 
 clock = pygame.time.Clock()
 
-
 7
+
 
 def show_fps():
     fps_text = str(int(clock.get_fps()))
@@ -43,8 +43,9 @@ def renderFramesOnScreen(asciiVideoJson):
         # textToRender = ascii_render_font.render(str(message), True, (255, 255, 255))
         # screen.blit(textToRender, textToRender.get_rect(center=(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)))
         if i < len(asciiVideoJson['totalFrames']):
-            ptext.draw_in_exact_center(asciiVideoJson['totalFrames'][i], screen, (500, 100), fontname="courier.ttf", fontsize=12,
-                                       lineheight=0.7,width=10,color=(255, 255, 255))
+            ptext.draw_in_exact_center(asciiVideoJson['totalFrames'][i], screen, (500, 100), fontname="courier.ttf",
+                                       fontsize=14,
+                                       lineheight=1, width=10, color=(255, 255, 255))
 
         i += 1
         clock.tick(FPS_LOCK_VALUE)  # making fps constant 30
