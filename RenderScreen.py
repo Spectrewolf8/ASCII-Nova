@@ -44,7 +44,7 @@ def renderFramesOnScreen(asciiVideoJson):
         # screen.blit(textToRender, textToRender.get_rect(center=(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)))
         if i < len(asciiVideoJson['totalFrames']):
             ptext.draw_in_exact_center(asciiVideoJson['totalFrames'][i], screen, (500, 100), fontname="courier.ttf",
-                                       fontsize=14,
+                                       fontsize=8,
                                        lineheight=1, width=10, color=(255, 255, 255))
 
         i += 1

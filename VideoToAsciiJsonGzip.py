@@ -9,7 +9,7 @@ import compress_json
 import Tester
 
 
-def renderVideoToAsciiJson(videoObject, numberOfThreads=1):
+def renderVideoToAsciiJson(videoObject,asciiRenderWidth=None, numberOfThreads=1):
     renderedFrames = []
     submittedThreads = []
 
@@ -25,8 +25,7 @@ def renderVideoToAsciiJson(videoObject, numberOfThreads=1):
     while x < len(frameChunks):
         submittedThreads.append(
 
-            threadPool.submit(renderFramesToAscii, frameChunks[x], videoObject.renderTextWidth,
-                              videoObject.renderTextHeight))
+            threadPool.submit(renderFramesToAscii, frameChunks[x], asciiRenderWidth))
         x += 1
 
     print(submittedThreads)
@@ -39,18 +38,12 @@ def renderVideoToAsciiJson(videoObject, numberOfThreads=1):
     makeJsonGzip(videoObject)
 
 
-def renderFramesToAscii(submittedFrames, renderTextWidth, renderTextHeight):
+def renderFramesToAscii(submittedFrames, asciiRenderWidth):
     print(submittedFrames)
     asciiFramesBuffer = []
     for frame in submittedFrames:
         print('current frame', frame)
-        #
-        # wholeFrame = ""
-        # for ascii_rowns in ImageToAscii.convert_Image_To_Ascii(f'temp/' + frame,
-        #                                                        (round(renderTextWidth),
-        #                                                         round(renderTextHeight))):
-        #     wholeFrame += "\n" + ascii_rowns  # splitting lines onto next lines
-        asciiFramesBuffer.append(ImageToAscii.convert_Image_To_Ascii(f'temp/' + frame))
+        asciiFramesBuffer.append(ImageToAscii.convert_Image_To_Ascii(f'temp/' + frame, asciiRenderWidth))
         os.remove(f'temp/' + frame)
     return asciiFramesBuffer
 
