@@ -4,7 +4,7 @@ import cv2
 
 
 class VideoObject:
-    def __init__(self, path, renderTextWidth, renderTextHeight):
+    def __init__(self, path, renderTextWidth=0):
         self.path = path
         self.filename = os.path.basename(path)
         cap = cv2.VideoCapture(path)
@@ -13,4 +13,4 @@ class VideoObject:
         self.frames = []
         self.renderChars = ''
         self.renderTextWidth = int(renderTextWidth)
-        self.renderTextHeight = int(renderTextHeight)
+

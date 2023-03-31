@@ -1,13 +1,14 @@
 from PIL import Image
 
-chars = [".", "@", "@", "@", "@", "@", "@", "@", "@", "@", "@"]
+default_ASCII_CHARS = ["@", "#", "＄", "%", "?", "*", "+", ";", ":", ",", "."]
 
 
-def image_to_ascii_art(image, asciiRenderWidth=None):
+def image_to_ascii_art(image, asciiRenderWidth=None, ASCII_CHARS=None):
+    if ASCII_CHARS is None:
+        ASCII_CHARS = default_ASCII_CHARS
     pixels = image.getdata()
-
     # replace each pixel with a character from array
-    new_pixels = [chars[pixel // 25] for pixel in pixels]
+    new_pixels = [ASCII_CHARS[pixel // 25] for pixel in pixels]
     new_pixels = ''.join(new_pixels)
     if asciiRenderWidth is None:
         new_width = 120
@@ -34,7 +35,7 @@ def resize_for_ascii(image_path, asciiRenderWidth=None):
 
 
 def grayscale(image):
-    # convert image to greyscale format
+    # convert image to grayscale format
     return image.convert('L')
 
 

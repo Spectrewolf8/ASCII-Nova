@@ -12,7 +12,7 @@ initial_time = time.time()
 asciiFramesBuffer = []
 i = 0
 print(len(asciiVideoJson['totalFrames']))
-RenderScreen.renderFramesOnScreen(asciiVideoJson)
+RenderScreen.renderFramesOnScreen(asciiVideoJson, showFpsSwitch=True)
 final_time = time.time()
 
 # print(asciiFramesBuffer)

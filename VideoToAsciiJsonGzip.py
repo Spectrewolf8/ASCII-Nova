@@ -6,10 +6,8 @@ from natsort import natsort
 import ImageToAscii
 import compress_json
 
-import Tester
 
-
-def renderVideoToAsciiJson(videoObject,asciiRenderWidth=None, numberOfThreads=1):
+def renderVideoToAsciiJson(videoObject, asciiRenderWidth=None, numberOfThreads=1):
     renderedFrames = []
     submittedThreads = []
 
@@ -30,9 +28,13 @@ def renderVideoToAsciiJson(videoObject,asciiRenderWidth=None, numberOfThreads=1)
 
     print(submittedThreads)
 
+    i = 0
     for x in submittedThreads:
         renderedFrames.extend(x.result())
+        i += 1
+        print("progress:", round((i/len(submittedThreads))*100))
 
+    threadPool.shutdown()
     print(len(renderedFrames))
     videoObject.frames = renderedFrames
     makeJsonGzip(videoObject)
@@ -82,8 +84,7 @@ def makeJsonGzip(videoObjectToWrite):
         'totalFrames': videoObjectToWrite.frames,
         'fps': videoObjectToWrite.fps,
         'renderChars': videoObjectToWrite.renderChars,
-        'renderTextWidth': videoObjectToWrite.renderTextWidth,
-        'renderTextHeight': videoObjectToWrite.renderTextHeight
+        'renderTextWidth': videoObjectToWrite.renderTextWidth
     }
 
     # creating a file at same destination and same with a different extension
