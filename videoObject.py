@@ -13,4 +13,5 @@ class VideoObject:
         self.frames = []
         self.renderChars = ''
         self.renderTextWidth = int(renderTextWidth)
+        self.base64Audio = ''
 

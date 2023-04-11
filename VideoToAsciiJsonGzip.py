@@ -5,6 +5,9 @@ import cv2
 from natsort import natsort
 import ImageToAscii
 import compress_json
+import base64
+import sys
+import moviepy.editor as mvEditor
 
 
 def renderVideoToAsciiJson(videoObject, asciiRenderWidth=None, numberOfThreads=1):
@@ -32,11 +35,12 @@ def renderVideoToAsciiJson(videoObject, asciiRenderWidth=None, numberOfThreads=1
     for x in submittedThreads:
         renderedFrames.extend(x.result())
         i += 1
-        print("progress:", round((i/len(submittedThreads))*100))
+        print("progress:", round((i / len(submittedThreads)) * 100))
 
     threadPool.shutdown()
     print(len(renderedFrames))
     videoObject.frames = renderedFrames
+    videoObject.base64Audio = str(renderBase64Audio(videoObject))
     makeJsonGzip(videoObject)
 
 
@@ -77,6 +81,19 @@ def splitFramesList(framesList, number_of_parts_to_split_in=1):
             for i in range(number_of_parts_to_split_in)]
 
 
+def renderBase64Audio(videoObject):
+    video = mvEditor.VideoFileClip(videoObject.path)
+    video.audio.write_audiofile("temp/" + videoObject.filename + "_audio.mp3")
+
+    with open(("temp/" + videoObject.filename + "_audio.mp3"), 'rb') as f:
+        base64AudioString = base64.b64encode(f.read())
+    print(sys.getsizeof(base64AudioString))
+    f.close()
+    os.remove("temp/" + videoObject.filename + "_audio.mp3")
+
+    return base64AudioString
+
+
 def makeJsonGzip(videoObjectToWrite):
     vidJsonObject = {
         'path': videoObjectToWrite.path,
@@ -84,7 +101,8 @@ def makeJsonGzip(videoObjectToWrite):
         'totalFrames': videoObjectToWrite.frames,
         'fps': videoObjectToWrite.fps,
         'renderChars': videoObjectToWrite.renderChars,
-        'renderTextWidth': videoObjectToWrite.renderTextWidth
+        'renderTextWidth': videoObjectToWrite.renderTextWidth,
+        'base64Audio': videoObjectToWrite.base64Audio
     }
 
     # creating a file at same destination and same with a different extension
