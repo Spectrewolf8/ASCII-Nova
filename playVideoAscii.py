@@ -4,15 +4,15 @@ import pygame
 import RenderScreen
 
 gzippedJsonfile_path = "BadAppleForPython2.json.gz"  # change to your own video path
-asciiVideoJson = compress_json.load(gzippedJsonfile_path)
+asciiVideoDict = compress_json.load(gzippedJsonfile_path) # loads json as a dictionary
 
-FPS_LOCK_VALUE = asciiVideoJson['fps']
+FPS_LOCK_VALUE = asciiVideoDict['fps']
 clock = pygame.time.Clock()
 initial_time = time.time()
 asciiFramesBuffer = []
 i = 0
-print(len(asciiVideoJson['totalFrames']))
-RenderScreen.renderFramesOnScreen(asciiVideoJson, showFpsSwitch=True)
+print(len(asciiVideoDict['base64Audio']))
+RenderScreen.renderFramesOnScreen(asciiVideoDict, showFpsSwitch=True)
 final_time = time.time()
 
 # print(asciiFramesBuffer)

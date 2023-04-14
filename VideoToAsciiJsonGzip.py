@@ -40,7 +40,7 @@ def renderVideoToAsciiJson(videoObject, asciiRenderWidth=None, numberOfThreads=1
     threadPool.shutdown()
     print(len(renderedFrames))
     videoObject.frames = renderedFrames
-    videoObject.base64Audio = str(renderBase64Audio(videoObject))
+    videoObject.base64Audio = renderBase64Audio(videoObject).decode('utf-8')
     makeJsonGzip(videoObject)
 
 
@@ -88,6 +88,7 @@ def renderBase64Audio(videoObject):
     with open(("temp/" + videoObject.filename + "_audio.mp3"), 'rb') as f:
         base64AudioString = base64.b64encode(f.read())
     print(sys.getsizeof(base64AudioString))
+    print(len(base64AudioString))
     f.close()
     os.remove("temp/" + videoObject.filename + "_audio.mp3")
 
@@ -98,7 +99,7 @@ def makeJsonGzip(videoObjectToWrite):
     vidJsonObject = {
         'path': videoObjectToWrite.path,
         'filename': videoObjectToWrite.filename,
-        'totalFrames': videoObjectToWrite.frames,
+        'AsciiFrames': videoObjectToWrite.frames,
         'fps': videoObjectToWrite.fps,
         'renderChars': videoObjectToWrite.renderChars,
         'renderTextWidth': videoObjectToWrite.renderTextWidth,
