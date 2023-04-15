@@ -1,5 +1,6 @@
 import base64
 import sys
+from math import floor
 
 import pygame
 from pygame import DOUBLEBUF, RESIZABLE, HWSURFACE, QUIT, display
@@ -121,11 +122,14 @@ def renderFramesOnScreen(asciiVideoDict, showFpsSwitch=True, ascii_render_font_n
                         print('Muted')
                 if event.key == pygame.K_j:  # fast backward
                     frameIndex = frameIndex - int(FPS_LOCK_VALUE) * 10
-                    pygame.mixer.music.set_pos(int(pygame.mixer.music.get_pos()) - 10)
-                    print(int(pygame.mixer.music.get_pos()) - 10)
+                    newPos = floor(frameIndex / FPS_LOCK_VALUE) - 10
+                    print("back by: ", newPos)
                     if frameIndex < 0:
-                        pygame.mixer.music.set_pos(0)
+                        newPos = 0
+                        pygame.mixer.music.set_pos(newPos)
                         frameIndex = 0
+                    else:
+                        pygame.mixer.music.set_pos(newPos)
                     print("Fast Backwarded 10s")
                     print('J')
                 if event.key == pygame.K_k:  # pause/upause
@@ -140,11 +144,13 @@ def renderFramesOnScreen(asciiVideoDict, showFpsSwitch=True, ascii_render_font_n
                     print('K')
                 if event.key == pygame.K_l:
                     frameIndex = frameIndex + int(FPS_LOCK_VALUE) * 10
-                    pygame.mixer.music.set_pos(int(pygame.mixer.music.get_pos() / 1000) + 10)
-                    print(int(pygame.mixer.music.get_pos() / 1000) + 10)
+                    newPos = floor(frameIndex / FPS_LOCK_VALUE) + 10
+                    print("forward by: ", newPos)
                     if frameIndex > len(asciiVideoDict['AsciiFrames']):
-                        pygame.mixer.music.set_pos(int(music_length))
+                        pygame.mixer.music.unload()
                         frameIndex = len(asciiVideoDict['AsciiFrames'])
+                    else:
+                        pygame.mixer.music.set_pos(newPos)
 
                     print("Fast Forwarded 10s")
                     print('L')
@@ -155,3 +161,5 @@ def renderFramesOnScreen(asciiVideoDict, showFpsSwitch=True, ascii_render_font_n
             # Check for QUIT event
             if event.type == QUIT:
                 display.quit()
+        if frameIndex >= len(asciiVideoDict['AsciiFrames']):
+            break

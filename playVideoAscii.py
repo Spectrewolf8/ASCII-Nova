@@ -15,7 +15,4 @@ print(len(asciiVideoDict['base64Audio']))
 RenderScreen.renderFramesOnScreen(asciiVideoDict, showFpsSwitch=True)
 final_time = time.time()
 
-# print(asciiFramesBuffer)
-print("\n\n\n FPS :", end="")
-print(i / (final_time - initial_time))
-print("Total frames generated :", i, "in", (final_time - initial_time))
+
