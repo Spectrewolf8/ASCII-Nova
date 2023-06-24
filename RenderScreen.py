@@ -1,4 +1,5 @@
 import base64
+import os
 import sys
 from math import floor
 
@@ -163,3 +164,4 @@ def renderFramesOnScreen(asciiVideoDict, showFpsSwitch=True, ascii_render_font_n
                 display.quit()
         if frameIndex >= len(asciiVideoDict['AsciiFrames']):
             break
+    os.remove("temp/" + asciiVideoDict['filename'] + '_audio_decoded.mp3')
