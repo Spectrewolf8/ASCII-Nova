@@ -30,7 +30,7 @@ def resize_for_ascii(image_path, asciiRenderWidth=None):
         new_width = 120
     else:
         new_width = asciiRenderWidth
-    new_height = aspect_ratio * new_width * 0.55
+    new_height = aspect_ratio * new_width * 0.55  # multiplied by 0.55 to adjust height to width ratio
     return img.resize((new_width, int(new_height)))
 
 
