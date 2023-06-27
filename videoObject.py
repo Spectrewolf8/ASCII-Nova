@@ -1,5 +1,4 @@
 import os
-
 import cv2
 
 
@@ -14,4 +13,3 @@ class VideoObject:
         self.renderChars = ''
         self.renderTextWidth = int(renderTextWidth)
         self.base64Audio = ''
-

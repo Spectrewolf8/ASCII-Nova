@@ -10,7 +10,7 @@ import sys
 import moviepy.editor as mvEditor
 
 
-def renderVideoToAsciiJson(videoObject, asciiRenderWidth=None, numberOfThreads=1):
+def renderVideoToAsciiJson(videoObject, asciiRenderWidth=None, numberOfThreads=1, ASCII_CHARS=None):
     renderedFrames = []
     submittedThreads = []
 
@@ -26,7 +26,7 @@ def renderVideoToAsciiJson(videoObject, asciiRenderWidth=None, numberOfThreads=1
     while x < len(frameChunks):
         submittedThreads.append(
 
-            threadPool.submit(renderFramesToAscii, frameChunks[x], asciiRenderWidth))
+            threadPool.submit(renderFramesToAscii, frameChunks[x], asciiRenderWidth, ASCII_CHARS))
         x += 1
 
     print(submittedThreads)
@@ -44,12 +44,13 @@ def renderVideoToAsciiJson(videoObject, asciiRenderWidth=None, numberOfThreads=1
     makeJsonGzip(videoObject)
 
 
-def renderFramesToAscii(submittedFrames, asciiRenderWidth):
+def renderFramesToAscii(submittedFrames, asciiRenderWidth, ASCII_CHARS=None):
     print(submittedFrames)
     asciiFramesBuffer = []
     for frame in submittedFrames:
         print('current frame', frame)
-        asciiFramesBuffer.append(ImageToAscii.convert_Image_To_Ascii(f'temp/' + frame, asciiRenderWidth))
+        asciiFramesBuffer.append(
+            ImageToAscii.convert_Image_To_Ascii(f'temp/' + frame, asciiRenderWidth, ASCII_CHARS=ASCII_CHARS))
         os.remove(f'temp/' + frame)
     return asciiFramesBuffer
 

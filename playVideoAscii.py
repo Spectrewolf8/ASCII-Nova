@@ -31,5 +31,5 @@ asciiFramesBuffer = []
 i = 0
 print(len(asciiVideoDict['base64Audio']))
 renderAudio()
-RenderScreen.renderFramesOnScreen(asciiVideoDict, showFpsSwitch=True)
+RenderScreen.renderFramesOnScreen(asciiVideoDict, "#FFFF00", 8, showFpsSwitch=True)
 final_time = time.time()

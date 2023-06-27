@@ -51,17 +51,6 @@ def initializeMediaControls(asciiVideoDict):
     pygame.mixer.music.play()
     pygame.mixer.music.set_volume(1.0)
 
-    # pygame.mixer.music.set_pos(30)
-    # i = 0
-    # while i <= 50000000:
-    #     print(i)
-    #     if 300000 < i < 4000000:
-    #         pygame.mixer.music.pause()
-    #     else:
-    #         pygame.mixer.music.unpause()
-    #     i += 1
-    # pygame.mixer.music.stop()
-
 
 def showMediaControls():
     media_controls_surface = media_controls_render_font.render(
@@ -74,7 +63,7 @@ def showMediaControls():
 # pygame.mixer.music.unload()
 
 
-def renderFramesOnScreen(asciiVideoDict, showFpsSwitch=True, ascii_render_font_name="fonts/courier.ttf"):
+def renderFramesOnScreen(asciiVideoDict, fontColorHex="#FFFFFF",fontSize=14,showFpsSwitch=True, ascii_render_font_name="fonts/courier.ttf"):
     music_length = pygame.mixer.Sound("temp/" + asciiVideoDict['filename'] + '_audio_decoded.mp3').get_length()
     print(music_length)
     FPS_LOCK_VALUE = asciiVideoDict['fps']
@@ -84,84 +73,94 @@ def renderFramesOnScreen(asciiVideoDict, showFpsSwitch=True, ascii_render_font_n
 
     running = True
     playback_paused = False
-    # game loop
-    while running:
-        if playback_paused is True:
-            pass
-        elif playback_paused is False:
+    try:
+        # game loop
+        while running:
+            if playback_paused is True:
+                pass
+            elif playback_paused is False:
+                screen.fill(background_colour)  # filling background on resize/refresh
+                if frameIndex < len(asciiVideoDict['AsciiFrames']):
+                    frameIndex += 1
+
             screen.fill(background_colour)  # filling background on resize/refresh
+
             if frameIndex < len(asciiVideoDict['AsciiFrames']):
-                frameIndex += 1
+                ptext.draw_in_exact_center(asciiVideoDict['AsciiFrames'][frameIndex], screen, 0, 10, (500, 100),
+                                           fontname=ascii_render_font_name,
+                                           fontsize=fontSize,
+                                           lineheight=1, width=10, color=fontColorHex)
 
-        screen.fill(background_colour)  # filling background on resize/refresh
+            clock.tick(FPS_LOCK_VALUE)  # making fps constant(synced to original video's fps)
+            show_fps(showFpsSwitch)  # to display fps in top left
+            showMediaControls()
 
-        if frameIndex < len(asciiVideoDict['AsciiFrames']):
-            ptext.draw_in_exact_center(asciiVideoDict['AsciiFrames'][frameIndex], screen, 0, 10, (500, 100),
-                                       fontname=ascii_render_font_name,
-                                       fontsize=14,
-                                       lineheight=1, width=10, color=(255, 255, 255))
+            display.flip()  # to update display
 
-        clock.tick(FPS_LOCK_VALUE)  # making fps constant(synced to original video's fps)
-        show_fps(showFpsSwitch)  # to display fps in top left
-        showMediaControls()
+            # keys = pygame.key.get_pressed()
+            for event in pygame.event.get():
+                # Check for media control key events
+                pygame.event.pump()
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_m:  # mute/unmute
+                        print("M pressed")
+                        print(pygame.mixer.music.get_volume())
+                        if pygame.mixer.music.get_volume() == 0.0:
+                            pygame.mixer.music.set_volume(1.0)
+                            print('Unmuted')
+                        elif pygame.mixer.music.get_volume() == 1.0:
+                            pygame.mixer.music.set_volume(0.0)
+                            print('Muted')
+                    if event.key == pygame.K_j:  # fast-backward
+                        frameIndex = frameIndex - int(FPS_LOCK_VALUE) * 10
+                        newPos = floor(frameIndex / FPS_LOCK_VALUE) - 10
+                        print("back by: ", newPos)
+                        if frameIndex < 0:
+                            newPos = 0
+                            pygame.mixer.music.set_pos(newPos)
+                            frameIndex = 0
+                        else:
+                            pygame.mixer.music.set_pos(newPos)
+                        print("Fast Backwarded 10s")
+                        print('J')
+                    if event.key == pygame.K_k:  # pause/upause
+                        if playback_paused is False:
+                            playback_paused = True
+                            pygame.mixer.music.pause()
+                            print("Paused")
+                        elif playback_paused is True:
+                            playback_paused = False
+                            pygame.mixer.music.unpause()
+                            print("UnPaused")
+                        print('K')
+                    if event.key == pygame.K_l:  # fast-forward
+                        frameIndex = frameIndex + int(FPS_LOCK_VALUE) * 10
+                        newPos = floor(frameIndex / FPS_LOCK_VALUE) + 10
+                        print("forward by: ", newPos)
+                        if frameIndex > len(asciiVideoDict['AsciiFrames']):
+                            pygame.mixer.music.unload()
+                            frameIndex = len(asciiVideoDict['AsciiFrames'])
+                        else:
+                            pygame.mixer.music.set_pos(newPos)
 
-        display.flip()  # to update display
-
-        # keys = pygame.key.get_pressed()
-        for event in pygame.event.get():
-            # Check for media control key events
-            pygame.event.pump()
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_m:  # mute/unmute
-                    print("M pressed")
-                    print(pygame.mixer.music.get_volume())
-                    if pygame.mixer.music.get_volume() == 0.0:
-                        pygame.mixer.music.set_volume(1.0)
-                        print('Unmuted')
-                    elif pygame.mixer.music.get_volume() == 1.0:
-                        pygame.mixer.music.set_volume(0.0)
-                        print('Muted')
-                if event.key == pygame.K_j:  # fast backward
-                    frameIndex = frameIndex - int(FPS_LOCK_VALUE) * 10
-                    newPos = floor(frameIndex / FPS_LOCK_VALUE) - 10
-                    print("back by: ", newPos)
-                    if frameIndex < 0:
-                        newPos = 0
-                        pygame.mixer.music.set_pos(newPos)
-                        frameIndex = 0
-                    else:
-                        pygame.mixer.music.set_pos(newPos)
-                    print("Fast Backwarded 10s")
-                    print('J')
-                if event.key == pygame.K_k:  # pause/upause
-                    if playback_paused is False:
-                        playback_paused = True
-                        pygame.mixer.music.pause()
-                        print("Paused")
-                    elif playback_paused is True:
-                        playback_paused = False
-                        pygame.mixer.music.unpause()
-                        print("UnPaused")
-                    print('K')
-                if event.key == pygame.K_l:
-                    frameIndex = frameIndex + int(FPS_LOCK_VALUE) * 10
-                    newPos = floor(frameIndex / FPS_LOCK_VALUE) + 10
-                    print("forward by: ", newPos)
-                    if frameIndex > len(asciiVideoDict['AsciiFrames']):
-                        pygame.mixer.music.unload()
-                        frameIndex = len(asciiVideoDict['AsciiFrames'])
-                    else:
-                        pygame.mixer.music.set_pos(newPos)
-
-                    print("Fast Forwarded 10s")
-                    print('L')
-                    if event.key == pygame.K_r:  # mute/unmute
+                        print("Fast Forwarded 10s")
+                        print('L')
+                    if event.key == pygame.K_r:  # replay
                         frameIndex = 0
                         pygame.mixer.music.set_pos(0)
                         print('Replayed')
-            # Check for QUIT event
-            if event.type == QUIT:
-                display.quit()
-        if frameIndex >= len(asciiVideoDict['AsciiFrames']):
-            break
-    os.remove("temp/" + asciiVideoDict['filename'] + '_audio_decoded.mp3')
+                # Check for QUIT event
+                if event.type == QUIT:
+                    display.quit()
+            if frameIndex >= len(asciiVideoDict['AsciiFrames']):
+                break
+    except pygame.error as e:
+        if e.args[0] == 'video system not initialized':
+            print("Error: Video system not initialized")
+            sys.exit(0)
+        elif e.args[0] == 'display Surface quit':
+            print("Error: Display windows was quit")
+            sys.exit(0)
+    finally:
+        pygame.mixer.music.unload()
+        os.remove("temp/" + asciiVideoDict['filename'] + '_audio_decoded.mp3')
