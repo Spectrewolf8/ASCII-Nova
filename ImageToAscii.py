@@ -21,6 +21,7 @@ def image_to_ascii_art(image, asciiRenderWidth=None, ASCII_CHARS=None):
 
     return ascii_image_string
 
+
 def resize_for_ascii(image_path, asciiRenderWidth=None):
     img = Image.open(image_path)  # create image object
     # resize the image

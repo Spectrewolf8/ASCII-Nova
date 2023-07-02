@@ -1,7 +1,7 @@
 import time
 
 import VideoToAsciiJsonGzip
-from videoObject import VideoObject
+from VideoObject import VideoObject
 
 inittime = time.time()
 videoObjectx = VideoObject('BadAppleForPython2.mp4', 0)

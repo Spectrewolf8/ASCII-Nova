@@ -3,7 +3,7 @@ import cv2
 
 
 class VideoObject:
-    def __init__(self, path, renderTextWidth=0):
+    def __init__(self, path, renderTextWidth=120):
         self.path = path
         self.filename = os.path.basename(path)
         cap = cv2.VideoCapture(path)

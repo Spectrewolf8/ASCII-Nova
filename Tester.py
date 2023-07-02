@@ -31,6 +31,9 @@
 # except Exception as e:
 #     print(e)
 #     sys.exit(0)
-from ImageToAscii import convert_Image_To_Ascii
+# from ImageToAscii import convert_Image_To_Ascii
+#
+# print(convert_Image_To_Ascii("temp/500.jpg", ASCII_CHARS=None))
+import RTplayVideoAscii
 
-print(convert_Image_To_Ascii("temp/500.jpg", ASCII_CHARS=None))
+RTplayVideoAscii.RTplayVideoAscii(r"BadAppleForPython2.mp4", 240)

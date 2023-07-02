@@ -29,15 +29,6 @@ media_controls_render_font = pygame.font.Font('fonts/courier.ttf', 12)
 clock = pygame.time.Clock()
 
 
-def show_fps(showFpsSwitch=True):
-    if showFpsSwitch is True:
-        fps_text = str(int(clock.get_fps()))
-        fps_surface = fps_count_render_font.render('', showFpsSwitch, (255, 255, 255))
-        fps_surface.fill(background_colour)
-        fps_surface = fps_count_render_font.render(('fps: ' + fps_text), showFpsSwitch, (255, 255, 255))
-        screen.blit(fps_surface, fps_surface.get_rect())
-
-
 def initializeMediaControls(asciiVideoDict):
     try:
         file = open("temp/" + asciiVideoDict['filename'] + '_audio_decoded.mp3', 'wb')
@@ -52,18 +43,50 @@ def initializeMediaControls(asciiVideoDict):
     pygame.mixer.music.set_volume(1.0)
 
 
-def showMediaControls():
-    media_controls_surface = media_controls_render_font.render(
-        'J - FastBackward(10s)     L - FastForward(10s)   K - Pause/Unpause   M - Mute/Unmute   R - Replay', True,
-        (255, 255, 255))
-    screen.blit(media_controls_surface, (screen.get_rect().left, 12.5))
+# incorporated this into renderOverlay:
+# def show_fps(showFpsSwitch=True):
+#     if showFpsSwitch is True:
+#         fps_text = str(int(clock.get_fps()))
+#         fps_surface = fps_count_render_font.render('', showFpsSwitch, (255, 255, 255))
+#         fps_surface.fill(background_colour)
+#         fps_surface = fps_count_render_font.render(('fps: ' + fps_text), showFpsSwitch, (255, 255, 255))
+#         screen.blit(fps_surface, fps_surface.get_rect())
+
+# def showMediaControls():
+#     media_controls_surface = media_controls_render_font.render(
+#         'J - FastBackward(10s)     L - FastForward(10s)   K - Pause/Unpause   M - Mute/Unmute   R - Replay', True,
+#         (255, 255, 255))
+#     screen.blit(media_controls_surface, (screen.get_rect().left, 12.5))
+
+
+def render_overlay(show_fps_switch=True):
+    if show_fps_switch:
+        overlay_surface = pygame.Surface((screen.get_rect().right - 20, 40))
+    else:
+        overlay_surface = pygame.Surface((screen.get_rect().right - 20, 20))
+    overlay_surface.set_colorkey((0, 0, 0))  # Set the background color of the overlay as transparent
+    pygame.draw.rect(overlay_surface, (30, 30, 20), overlay_surface.get_rect(),
+                     border_radius=6)  # Set the color and border radius
+
+    media_controls_text = 'J - FastBackward(10s)     L - FastForward(10s)   K - Pause/Unpause   M - Mute/Unmute   R - Replay'
+    media_controls_surface = media_controls_render_font.render(media_controls_text, True, (255, 255, 255))
+    overlay_surface.blit(media_controls_surface, (5, 5))  # Customize the position of the media controls text
+
+    if show_fps_switch:
+        fps_text = str(int(clock.get_fps()))
+        fps_surface = fps_count_render_font.render('fps: ' + fps_text, True, (255, 255, 255))
+        overlay_surface.blit(fps_surface, (5, 20))  # Customize the position of the FPS text
+
+    screen.blit(overlay_surface, (screen.get_width() - overlay_surface.get_width() - 10,
+                                  10))  # Customize the position of the overlay surface on the screen
 
 
 #
 # pygame.mixer.music.unload()
 
 
-def renderFramesOnScreen(asciiVideoDict, fontColorHex="#FFFFFF",fontSize=14,showFpsSwitch=True, ascii_render_font_name="fonts/courier.ttf"):
+def renderFramesOnScreen(asciiVideoDict, fontColorHex="#FFFFFF", fontSize=14, showFpsSwitch=True,
+                         ascii_render_font_name="fonts/courier.ttf"):
     music_length = pygame.mixer.Sound("temp/" + asciiVideoDict['filename'] + '_audio_decoded.mp3').get_length()
     print(music_length)
     FPS_LOCK_VALUE = asciiVideoDict['fps']
@@ -92,8 +115,7 @@ def renderFramesOnScreen(asciiVideoDict, fontColorHex="#FFFFFF",fontSize=14,show
                                            lineheight=1, width=10, color=fontColorHex)
 
             clock.tick(FPS_LOCK_VALUE)  # making fps constant(synced to original video's fps)
-            show_fps(showFpsSwitch)  # to display fps in top left
-            showMediaControls()
+            render_overlay(showFpsSwitch)
 
             display.flip()  # to update display
 

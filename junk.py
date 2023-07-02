@@ -4,7 +4,7 @@ import cv2
 import os
 from natsort import natsort
 import VideoToAsciiJsonGzip
-from videoObject import VideoObject
+from VideoObject import VideoObject
 from concurrent.futures import ThreadPoolExecutor
 import ImageToAscii
 
