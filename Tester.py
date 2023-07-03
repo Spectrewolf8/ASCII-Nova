@@ -34,6 +34,19 @@
 # from ImageToAscii import convert_Image_To_Ascii
 #
 # print(convert_Image_To_Ascii("temp/500.jpg", ASCII_CHARS=None))
-import RTplayVideoAscii
+# import RendererAndPlayer.RTplayVideoAscii as RTplayVideoAscii
+#
+# RTplayVideoAscii.RTplayVideoAscii(r"BadAppleForPython2.mp4", 140)
 
-RTplayVideoAscii.RTplayVideoAscii(r"BadAppleForPython2.mp4", 140)
+# from tkinter import Tk     # from tkinter import Tk for Python 3.x
+# from tkinter.filedialog import askopenfilename
+#
+# Tk().withdraw() # we don't want a full GUI, so keep the root window from appearing
+# filename = askopenfilename() # show an "Open" dialog box and return the path to the selected file
+# print(filename)
+
+import easygui
+
+filepath = easygui.fileopenbox("Choose a json.gz file to play", "ASCII Nova",
+                               filetypes=["*.json.gz"], default="*.json.gz", multiple=False)
+print(filepath)
