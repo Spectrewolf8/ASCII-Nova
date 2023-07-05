@@ -1,8 +1,10 @@
 # Created by: PyQt5 UI code generator 5.15.9
 # AsciiNovaUiV2 with minor changes implemented
+import os
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 import easygui
+from natsort import natsort
 
 
 class Ui_MainWindow(object):
@@ -86,7 +88,7 @@ class Ui_MainWindow(object):
         self.windows_title_label_3 = QtWidgets.QLabel(self.stack_page_3)
         self.rt_play_warning_label = QtWidgets.QLabel(self.stack_page_3)
         self.render_chars_warning_label_2 = QtWidgets.QLabel(self.stack_page_3)
-        self.choose_fontComboBox_3 = QtWidgets.QComboBox(self.stack_page_3)
+        self.choose_fontComboBox_2 = QtWidgets.QComboBox(self.stack_page_3)
         self.render_color_hex_label_3 = QtWidgets.QLabel(self.stack_page_3)
 
     def setupUi(self):
@@ -467,7 +469,7 @@ class Ui_MainWindow(object):
         font.setPointSize(10)
         self.render_color_hex_label.setFont(font)
         self.render_color_hex_label.setObjectName("render_color_hex_label")
-        self.play_ascii_video_pushButton.setGeometry(QtCore.QRect(30, 544, 221, 80))
+        self.play_ascii_video_pushButton.setGeometry(QtCore.QRect(30, 544, 250, 80))
         self.play_ascii_video_pushButton.setMaximumSize(QtCore.QSize(16777215, 16777215))
         font = QtGui.QFont()
         font.setFamily("Noto Sans Medium")
@@ -477,7 +479,7 @@ class Ui_MainWindow(object):
         font.setStyleStrategy(QtGui.QFont.PreferAntialias)
         self.play_ascii_video_pushButton.setFont(font)
         self.play_ascii_video_pushButton.setStyleSheet("QPushButton{\n"
-                                                       "font: 100 12pt \"Consolas\";\n"
+                                                       "font: 75 16pt \"Consolas\";\n"
                                                        "background-color: rgb(220, 138, 221);\n"
                                                        "border-radius:5;\n"
                                                        "padding:5;\n"
@@ -489,9 +491,11 @@ class Ui_MainWindow(object):
         self.play_ascii_video_pushButton.setIcon(icon2)
         self.play_ascii_video_pushButton.setIconSize(QtCore.QSize(28, 28))
         self.play_ascii_video_pushButton.setObjectName("play_ascii_video_pushButton")
-        self.choose_fontComboBox.setGeometry(QtCore.QRect(29, 240, 180, 30))
+        self.choose_fontComboBox.setGeometry(QtCore.QRect(30, 240, 180, 30))
         self.choose_fontComboBox.setStyleSheet("/*For combo box*/\n"
                                                "QComboBox{\n"
+                                               "padding-left:5px;\n"
+                                               "font: 75 14pt \"Ms Shell Dg\";\n"
                                                "background-color:rgb(255, 117, 117);\n"
                                                "border:1px solid transparent;\n"
                                                "border-radius:5px;\n"
@@ -1094,9 +1098,11 @@ class Ui_MainWindow(object):
                                                         "")
         self.render_chars_warning_label_2.setWordWrap(True)
         self.render_chars_warning_label_2.setObjectName("render_chars_warning_label_2")
-        self.choose_fontComboBox_3.setGeometry(QtCore.QRect(30, 448, 171, 30))
-        self.choose_fontComboBox_3.setStyleSheet("/*For combo box*/\n"
+        self.choose_fontComboBox_2.setGeometry(QtCore.QRect(30, 448, 171, 30))
+        self.choose_fontComboBox_2.setStyleSheet("/*For combo box*/\n"
                                                  "QComboBox{\n"
+                                                 "padding-left:5px;\n"
+                                                 "font: 75 14pt \"Ms Shell Dg\";\n"
                                                  "background-color:rgb(255, 117, 117);\n"
                                                  "border:1px solid transparent;\n"
                                                  "border-radius:5px;\n"
@@ -1158,7 +1164,7 @@ class Ui_MainWindow(object):
                                                  "QComboBox QScrollBar::add-page:vertical, QComboBox QScrollBar::sub-page:vertical {\n"
                                                  "    background: none;\n"
                                                  "}")
-        self.choose_fontComboBox_3.setObjectName("choose_fontComboBox_3")
+        self.choose_fontComboBox_2.setObjectName("choose_fontComboBox_3")
         self.render_color_hex_label_3.setGeometry(QtCore.QRect(30, 478, 121, 30))
         font = QtGui.QFont()
         font.setPointSize(10)
@@ -1185,7 +1191,7 @@ class Ui_MainWindow(object):
         self.windows_title_label_3.raise_()
         self.rt_play_warning_label.raise_()
         self.render_chars_warning_label_2.raise_()
-        self.choose_fontComboBox_3.raise_()
+        self.choose_fontComboBox_2.raise_()
         self.main_continer_stack.addWidget(self.stack_page_3)
         self.stack_page_4.setObjectName("stack_page_4")
         self.help_label.setGeometry(QtCore.QRect(39, 39, 600, 100))
@@ -1219,7 +1225,7 @@ class Ui_MainWindow(object):
 
         self.play_ascii_video_btn.setToolTip(_translate("MainWindow", "Play"))
         self.play_ascii_video_btn.setText(_translate("MainWindow", "Play"))
-        self.play_ascii_video_btn.clicked.connect(lambda: self.main_continer_stack.setCurrentIndex(1))
+        self.play_ascii_video_btn.clicked.connect(self.initializeAsciiPlayer)
 
         self.convert_video_to_ascii_btn.setToolTip(_translate("MainWindow", "Convert"))
         self.convert_video_to_ascii_btn.setText(_translate("MainWindow", "Convert"))
@@ -1277,7 +1283,8 @@ class Ui_MainWindow(object):
         self.line_height_label.setText(_translate("MainWindow", "Line Height:"))
         self.font_size_label.setText(_translate("MainWindow", "Font Size:"))
         self.show_fps_checkBox.setText(_translate("MainWindow", "Show FPS*"))
-        self.render_color_hex_lineEdit.setText(_translate("MainWindow", "#"))
+        self.show_fps_checkBox.setChecked(True)
+        self.render_color_hex_lineEdit.setText(_translate("MainWindow", "#FFFFFF"))
         self.render_color_hex_label.setText(_translate("MainWindow", "Render Color Hex:"))
         self.play_ascii_video_pushButton.setText(_translate("MainWindow", "Play Ascii Video!"))
         self.path_textBrowser_2.setHtml(_translate("MainWindow",
@@ -1316,10 +1323,11 @@ class Ui_MainWindow(object):
         self.path_label_3.setText(_translate("MainWindow", "mp4 file location:"))
         self.ascii_image_width_warning_label.setText(
             _translate("MainWindow", "⚠️ Height calculated using width. Aspect-ratio preserved. Defaults to 120 chars"))
-        self.render_color_hex_lineEdit_2.setText(_translate("MainWindow", "#"))
+        self.render_color_hex_lineEdit_2.setText(_translate("MainWindow", "#FFFFFF"))
         self.render_color_hex_label_2.setText(_translate("MainWindow", "Render Color Hex:"))
         self.font_size_label_2.setText(_translate("MainWindow", "Font Size:"))
         self.show_fps_checkBox_2.setText(_translate("MainWindow", "Show FPS*"))
+        self.show_fps_checkBox_2.setChecked(True)
         self.render_font_label_2.setText(_translate("MainWindow", "Render Font:"))
         self.line_height_label_2.setText(_translate("MainWindow", "Line Height:"))
         self.windows_title_label_3.setText(_translate("MainWindow", "ASCII Realtime Player"))
@@ -1334,12 +1342,35 @@ class Ui_MainWindow(object):
         self.main_continer_stack.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(self.MainWindow)
 
+        # even handling for stack pages done above
+        # Handling events
+        self.browse_file_btn.clicked.connect(self.browseFileForAsciiPlayer)
 
-def browseFileForAsciiPlayer():
-    filepath = easygui.fileopenbox("Choose a json.gz file to play", "ASCII Nova",
-                                   filetypes=["*.json.gz"], default="*.json.gz", multiple=False)
-    print(filepath)
+    # methods associated with events
 
+    # Ascii player
+    def initializeAsciiPlayer(self):
+        fonts = os.listdir("../fonts")
+        fonts = natsort.natsorted(fonts, reverse=False)
+        self.choose_fontComboBox.addItems(fonts)
+        self.main_continer_stack.setCurrentIndex(1)
+
+    def browseFileForAsciiPlayer(self):
+        filepath = easygui.fileopenbox("Choose a json.gz file to play", "ASCII Nova",
+                                       filetypes=["*.json.gz"], default="*.json.gz", multiple=False)
+
+        if filepath.endswith(".json.gz"):
+            self.path_textBrowser.setText(filepath)
+        else:
+            print("The file path does not have the '.json.gz' extension.")
+        print(filepath)
+
+    def playAsciiVideo(self):
+
+        pass
+
+
+import AsciiNovaUIResources_rc
 
 if __name__ == "__main__":
     import sys
@@ -1350,3 +1381,5 @@ if __name__ == "__main__":
     ui.setupUi()
     ui.MainWindow.show()
     sys.exit(app.exec_())
+
+    # browseFileForAsciiPlayer()

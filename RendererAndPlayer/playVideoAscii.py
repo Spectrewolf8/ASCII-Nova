@@ -21,15 +21,9 @@ def renderAudio():
         sys.exit(0)
 
 
-gzippedJsonfile_path = "BadAppleForPython2.json.gz"  # change to your own video path
+gzippedJsonfile_path = "./RendererAndPlayer/BadAppleForPython2.json.gz"  # change to your own video path
 asciiVideoDict = compress_json.load(gzippedJsonfile_path)  # loads json as a dictionary
 
-FPS_LOCK_VALUE = asciiVideoDict['fps']
-clock = pygame.time.Clock()
-initial_time = time.time()
-asciiFramesBuffer = []
-i = 0
-print(len(asciiVideoDict['base64Audio']))
 renderAudio()
-RenderScreen.renderFramesOnScreen(asciiVideoDict, "#FFFF00", 8, showFpsSwitch=True)
-final_time = time.time()
+RenderScreen.renderFramesOnScreen(asciiVideoDict, "#FFFFFF", 8, 1, showFpsSwitch=True)
+

@@ -1,5 +1,6 @@
 import os
 import shutil
+import time
 from concurrent.futures import ThreadPoolExecutor
 import cv2
 from natsort import natsort
@@ -50,8 +51,8 @@ def renderFramesToAscii(submittedFrames, asciiRenderWidth, ASCII_CHARS=None):
     for frame in submittedFrames:
         print('current frame', frame)
         asciiFramesBuffer.append(
-            ImageToAscii.convert_Image_To_Ascii(f'temp/' + frame, asciiRenderWidth, ASCII_CHARS=ASCII_CHARS))
-        os.remove(f'temp/' + frame)
+            ImageToAscii.convert_Image_To_Ascii(f'../temp/' + frame, asciiRenderWidth, ASCII_CHARS=ASCII_CHARS))
+        os.remove(f'../temp/' + frame)
     return asciiFramesBuffer
 
 
@@ -62,12 +63,13 @@ def splitVideoIntoFrames(videoObject):
         shutil.rmtree('../temp')
     os.mkdir('../temp')
     capture = cv2.VideoCapture(videoObject.path)
+    print(videoObject.path)
     frameNr = 0
     while True:
         success, frame = capture.read()
         print(type(frame), frame)
         if success:
-            cv2.imwrite(f'temp/{frameNr}.jpg', frame)
+            cv2.imwrite(f'../temp/{frameNr}.jpg', frame)
 
         else:
             break
@@ -84,14 +86,14 @@ def splitFramesList(framesList, number_of_parts_to_split_in=1):
 
 def renderBase64Audio(videoObject):
     video = mvEditor.VideoFileClip(videoObject.path)
-    video.audio.write_audiofile("temp/" + videoObject.filename + "_audio.mp3")
+    video.audio.write_audiofile("../temp/" + videoObject.filename + "_audio.mp3")
 
-    with open(("temp/" + videoObject.filename + "_audio.mp3"), 'rb') as f:
+    with open(("../temp/" + videoObject.filename + "_audio.mp3"), 'rb') as f:
         base64AudioString = base64.b64encode(f.read())
     print(sys.getsizeof(base64AudioString))
     print(len(base64AudioString))
     f.close()
-    os.remove("temp/" + videoObject.filename + "_audio.mp3")
+    os.remove("../temp/" + videoObject.filename + "_audio.mp3")
 
     return base64AudioString
 

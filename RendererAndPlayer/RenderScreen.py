@@ -4,7 +4,7 @@ import sys
 from math import floor
 
 import pygame
-from pygame import DOUBLEBUF, RESIZABLE, HWSURFACE, QUIT, display
+from pygame import DOUBLEBUF, RESIZABLE, HWSURFACE, QUIT, display, K_ESCAPE, K_F11
 
 import ptext
 
@@ -17,14 +17,14 @@ background_colour = (30, 30, 30)
 SCREEN_WIDTH = 1280
 SCREEN_HEIGHT = 720
 
-screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), HWSURFACE | DOUBLEBUF | RESIZABLE)
+screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), HWSURFACE | DOUBLEBUF | RESIZABLE, vsync=1)
 screen.fill(background_colour)
 
 pygame.display.set_caption('ASCII Nova')
 pygame.display.flip()
 
-fps_count_render_font = pygame.font.Font('../fonts/courier.ttf', 16)
-media_controls_render_font = pygame.font.Font('../fonts/courier.ttf', 12)
+fps_count_render_font = pygame.font.Font('./fonts/courier.ttf', 16)
+media_controls_render_font = pygame.font.Font('./fonts/courier.ttf', 12)
 
 clock = pygame.time.Clock()
 
@@ -60,15 +60,26 @@ def initializeMediaControls(asciiVideoDict):
 
 
 def render_overlay(show_fps_switch=True):
-    if show_fps_switch:
-        overlay_surface = pygame.Surface((740, 40))
+    if not fullScreen:
+        if show_fps_switch:
+            overlay_surface = pygame.Surface((700, 40))
+        else:
+            overlay_surface = pygame.Surface((700, 20))
     else:
-        overlay_surface = pygame.Surface((740, 20))
+        if show_fps_switch:
+            overlay_surface = pygame.Surface((870, 40))
+        else:
+            overlay_surface = pygame.Surface((870, 20))
+
+    overlay_surface.set_alpha(200)
     overlay_surface.set_colorkey((0, 0, 0))  # Set the background color of the overlay as transparent
     pygame.draw.rect(overlay_surface, (30, 30, 20), overlay_surface.get_rect(),
-                     border_radius=6)  # Set the color and border radius
+                     border_radius=8)  # Set the color and border radius
 
-    media_controls_text = 'J - FastBackward(10s)     L - FastForward(10s)   K - Pause/Unpause   M - Mute/Unmute   R - Replay'
+    if not fullScreen:
+        media_controls_text = 'J - FastBackward(10s)     L - FastForward(10s)   K - Pause/Unpause   M - Mute/Unmute   R - Replay'
+    else:
+        media_controls_text = 'J - FastBackward(10s)     L - FastForward(10s)   K - Pause/Unpause   M - Mute/Unmute   R - Replay    Esc - Exit Full screen'
     media_controls_surface = media_controls_render_font.render(media_controls_text, True, (255, 255, 255))
     overlay_surface.blit(media_controls_surface, (5, 5))  # Customize the position of the media controls text
 
@@ -77,14 +88,20 @@ def render_overlay(show_fps_switch=True):
         fps_surface = fps_count_render_font.render('fps: ' + fps_text, True, (255, 255, 255))
         overlay_surface.blit(fps_surface, (5, 20))  # Customize the position of the FPS text
 
-    screen.blit(overlay_surface, (screen.get_rect().left + 10, 10)) # Customize the position of the overlay surface on the screen
+    screen.blit(overlay_surface,
+                (screen.get_rect().left + 10, 10))  # Customize the position of the overlay surface on the screen
 
 
 #
 # pygame.mixer.music.unload()
 
+# Track double-click event
+last_click_time = 0
+double_click_interval = 400  # milliseconds
+fullScreen = False
 
-def renderFramesOnScreen(asciiVideoDict, fontColorHex="#FFFFFF", fontSize=14, showFpsSwitch=True,
+
+def renderFramesOnScreen(asciiVideoDict, fontColorHex="#FFFFFF", fontSize=14, lineheight=1, showFpsSwitch=True,
                          ascii_render_font_name="fonts/courier.ttf"):
     music_length = pygame.mixer.Sound("temp/" + asciiVideoDict['filename'] + '_audio_decoded.mp3').get_length()
     print(music_length)
@@ -92,7 +109,7 @@ def renderFramesOnScreen(asciiVideoDict, fontColorHex="#FFFFFF", fontSize=14, sh
     frameIndex = 0
 
     initializeMediaControls(asciiVideoDict)
-
+    global screen, fullScreen, last_click_time, double_click_interval, SCREEN_WIDTH, SCREEN_HEIGHT
     running = True
     playback_paused = False
     try:
@@ -111,7 +128,7 @@ def renderFramesOnScreen(asciiVideoDict, fontColorHex="#FFFFFF", fontSize=14, sh
                 ptext.draw_in_exact_center(asciiVideoDict['AsciiFrames'][frameIndex], screen, 0, 10, (500, 100),
                                            fontname=ascii_render_font_name,
                                            fontsize=fontSize,
-                                           lineheight=1, width=10, color=fontColorHex)
+                                           lineheight=lineheight, width=10, color=fontColorHex)
 
             clock.tick(FPS_LOCK_VALUE)  # making fps constant(synced to original video's fps)
             render_overlay(showFpsSwitch)
@@ -170,6 +187,23 @@ def renderFramesOnScreen(asciiVideoDict, fontColorHex="#FFFFFF", fontSize=14, sh
                         frameIndex = 0
                         pygame.mixer.music.set_pos(0)
                         print('Replayed')
+
+                    # resize screen on key events
+                    if event.key == K_ESCAPE and fullScreen:
+                        screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT),
+                                                         HWSURFACE | DOUBLEBUF | RESIZABLE, vsync=1)
+                        fullScreen = False
+                if event.type == pygame.MOUSEBUTTONDOWN:
+
+                    # resize screen on key events
+                    if event.button == 1:
+                        print("click registered")
+                        if pygame.time.get_ticks() - last_click_time < double_click_interval:
+                            if not fullScreen:
+                                screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN,
+                                                                 HWSURFACE | DOUBLEBUF | RESIZABLE, vsync=1)
+                                fullScreen = True
+                        last_click_time = pygame.time.get_ticks()
                 # Check for QUIT event
                 if event.type == QUIT:
                     display.quit()
