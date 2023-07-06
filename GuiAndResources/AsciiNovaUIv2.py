@@ -27,7 +27,7 @@ class Ui_MainWindow(object):
         self.help_btn = QtWidgets.QPushButton(self.sidebar_subframe_3)
         self.main_container = QtWidgets.QFrame(self.centralwidget)
         self.gridLayout = QtWidgets.QGridLayout(self.main_container)
-        self.message_label = QtWidgets.QLabel(self.main_container)
+        self.system_message_label = QtWidgets.QLabel(self.main_container)
         self.main_continer_stack = QtWidgets.QStackedWidget(self.main_container)
         self.stack_page_0 = QtWidgets.QWidget()
         self.verticalLayout_4 = QtWidgets.QVBoxLayout(self.stack_page_0)
@@ -46,7 +46,7 @@ class Ui_MainWindow(object):
         self.show_fps_checkBox = QtWidgets.QCheckBox(self.stack_page_1)
         self.render_color_hex_lineEdit = QtWidgets.QLineEdit(self.stack_page_1)
         self.render_color_hex_label = QtWidgets.QLabel(self.stack_page_1)
-        self.play_ascii_video_pushButton = QtWidgets.QPushButton(self.stack_page_1)
+        self.start_playing_ascii_video_btn = QtWidgets.QPushButton(self.stack_page_1)
         self.choose_fontComboBox = QtWidgets.QComboBox(self.stack_page_1)
         self.stack_page_2 = QtWidgets.QWidget()
         self.path_textBrowser_2 = QtWidgets.QTextBrowser(self.stack_page_2)
@@ -252,19 +252,21 @@ class Ui_MainWindow(object):
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.message_label.sizePolicy().hasHeightForWidth())
-        self.message_label.setSizePolicy(sizePolicy)
-        self.message_label.setMinimumSize(QtCore.QSize(100, 65))
-        self.message_label.setStyleSheet("*{\n"
-                                         "background-color: rgb(242, 244, 240);\n"
-                                         "border-radius:20px;\n"
-                                         "padding: 2px;\n"
-                                         "}")
-        self.message_label.setText("")
-        self.message_label.setAlignment(QtCore.Qt.AlignLeading | QtCore.Qt.AlignLeft | QtCore.Qt.AlignTop)
-        self.message_label.setWordWrap(True)
-        self.message_label.setObjectName("message_label")
-        self.gridLayout.addWidget(self.message_label, 2, 0, 1, 1)
+        sizePolicy.setHeightForWidth(self.system_message_label.sizePolicy().hasHeightForWidth())
+        self.system_message_label.setSizePolicy(sizePolicy)
+        self.system_message_label.setMinimumSize(QtCore.QSize(100, 65))
+        self.system_message_label.setStyleSheet("*{\n"
+                                                "color: rgb(224, 27, 36);\n"
+                                                "font: 75 10pt \"Noto Sans Medium\";\n"
+                                                "background-color: rgb(230, 230, 230);\n"
+                                                "border-radius:20px;\n"
+                                                "padding: 8px;\n"
+                                                "}")
+        self.system_message_label.setText("No system message yet...")
+        self.system_message_label.setAlignment(QtCore.Qt.AlignLeading | QtCore.Qt.AlignLeft | QtCore.Qt.AlignTop)
+        self.system_message_label.setWordWrap(True)
+        self.system_message_label.setObjectName("message_label")
+        self.gridLayout.addWidget(self.system_message_label, 2, 0, 1, 1)
         font = QtGui.QFont()
         font.setFamily("Source Code Pro")
         font.setPointSize(14)
@@ -401,6 +403,7 @@ class Ui_MainWindow(object):
                                                      "}\n"
                                                      "")
         self.line_height_doubleSpinBox.setMaximum(2.0)
+        self.line_height_doubleSpinBox.setMinimum(0.20)
         self.line_height_doubleSpinBox.setSingleStep(0.1)
         self.line_height_doubleSpinBox.setProperty("value", 1.0)
         self.line_height_doubleSpinBox.setObjectName("line_height_doubleSpinBox")
@@ -469,28 +472,28 @@ class Ui_MainWindow(object):
         font.setPointSize(10)
         self.render_color_hex_label.setFont(font)
         self.render_color_hex_label.setObjectName("render_color_hex_label")
-        self.play_ascii_video_pushButton.setGeometry(QtCore.QRect(30, 544, 250, 80))
-        self.play_ascii_video_pushButton.setMaximumSize(QtCore.QSize(16777215, 16777215))
+        self.start_playing_ascii_video_btn.setGeometry(QtCore.QRect(30, 544, 250, 80))
+        self.start_playing_ascii_video_btn.setMaximumSize(QtCore.QSize(16777215, 16777215))
         font = QtGui.QFont()
         font.setFamily("Noto Sans Medium")
         font.setBold(True)
         font.setItalic(False)
         font.setWeight(75)
         font.setStyleStrategy(QtGui.QFont.PreferAntialias)
-        self.play_ascii_video_pushButton.setFont(font)
-        self.play_ascii_video_pushButton.setStyleSheet("QPushButton{\n"
-                                                       "font: 75 16pt \"Consolas\";\n"
-                                                       "background-color: rgb(220, 138, 221);\n"
-                                                       "border-radius:5;\n"
-                                                       "padding:5;\n"
-                                                       "text-align:center;\n"
-                                                       "}\n"
-                                                       "QPushButton:pressed{\n"
-                                                       "background-color: rgb(192, 191, 188)\n"
-                                                       "}")
-        self.play_ascii_video_pushButton.setIcon(icon2)
-        self.play_ascii_video_pushButton.setIconSize(QtCore.QSize(28, 28))
-        self.play_ascii_video_pushButton.setObjectName("play_ascii_video_pushButton")
+        self.start_playing_ascii_video_btn.setFont(font)
+        self.start_playing_ascii_video_btn.setStyleSheet("QPushButton{\n"
+                                                         "font: 75 16pt \"Consolas\";\n"
+                                                         "background-color: rgb(220, 138, 221);\n"
+                                                         "border-radius:5;\n"
+                                                         "padding:5;\n"
+                                                         "text-align:center;\n"
+                                                         "}\n"
+                                                         "QPushButton:pressed{\n"
+                                                         "background-color: rgb(192, 191, 188)\n"
+                                                         "}")
+        self.start_playing_ascii_video_btn.setIcon(icon2)
+        self.start_playing_ascii_video_btn.setIconSize(QtCore.QSize(28, 28))
+        self.start_playing_ascii_video_btn.setObjectName("play_ascii_video_pushButton")
         self.choose_fontComboBox.setGeometry(QtCore.QRect(30, 240, 180, 30))
         self.choose_fontComboBox.setStyleSheet("/*For combo box*/\n"
                                                "QComboBox{\n"
@@ -1239,7 +1242,7 @@ class Ui_MainWindow(object):
         self.help_btn.setText(_translate("MainWindow", "help"))
         self.help_btn.clicked.connect(lambda: self.main_continer_stack.setCurrentIndex(4))
 
-        self.message_label.setToolTip(_translate("MainWindow", "system message bar"))
+        self.system_message_label.setToolTip(_translate("MainWindow", "system message bar"))
         self.home_screen_logo_label.setText(_translate("MainWindow",
                                                        "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
                                                        "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
@@ -1286,7 +1289,7 @@ class Ui_MainWindow(object):
         self.show_fps_checkBox.setChecked(True)
         self.render_color_hex_lineEdit.setText(_translate("MainWindow", "#FFFFFF"))
         self.render_color_hex_label.setText(_translate("MainWindow", "Render Color Hex:"))
-        self.play_ascii_video_pushButton.setText(_translate("MainWindow", "Play Ascii Video!"))
+        self.start_playing_ascii_video_btn.setText(_translate("MainWindow", "Play Ascii Video!"))
         self.path_textBrowser_2.setHtml(_translate("MainWindow",
                                                    "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
                                                    "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
@@ -1344,7 +1347,10 @@ class Ui_MainWindow(object):
 
         # even handling for stack pages done above
         # Handling events
+
+        # Ascii player
         self.browse_file_btn.clicked.connect(self.browseFileForAsciiPlayer)
+        self.start_playing_ascii_video_btn.clicked.connect(self.playAsciiVideo)
 
     # methods associated with events
 
@@ -1359,15 +1365,29 @@ class Ui_MainWindow(object):
         filepath = easygui.fileopenbox("Choose a json.gz file to play", "ASCII Nova",
                                        filetypes=["*.json.gz"], default="*.json.gz", multiple=False)
 
+        self.system_message_label.setText("No system message yet...")
+
         if filepath.endswith(".json.gz"):
             self.path_textBrowser.setText(filepath)
         else:
-            print("The file path does not have the '.json.gz' extension.")
+            self.system_message_label.setText("Invalid file: The file path does not have the '.json.gz' extension.")
+            self.path_textBrowser.setText("")
+
         print(filepath)
 
     def playAsciiVideo(self):
 
-        pass
+        if self.path_textBrowser.toPlainText() == "Path" or self.path_textBrowser.toPlainText() == "":
+            self.system_message_label.setText("No file selected. Please select a file.")
+        else:
+
+            from RendererAndPlayer import AsciiVideoPlayer
+            AsciiVideoPlayer.lineHeight = self.line_height_doubleSpinBox.value()
+            AsciiVideoPlayer.fontSize = self.font_size_spinBox.value()
+            AsciiVideoPlayer.fontColorHex = self.render_color_hex_lineEdit.text()
+            AsciiVideoPlayer.font = "../fonts/" + self.choose_fontComboBox.currentText()
+            AsciiVideoPlayer.showFpsSwitch = self.show_fps_checkBox.isChecked()
+            AsciiVideoPlayer.playAsciiVideo(self.path_textBrowser.toPlainText())
 
 
 import AsciiNovaUIResources_rc

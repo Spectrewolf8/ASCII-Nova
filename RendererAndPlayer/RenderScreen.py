@@ -6,7 +6,7 @@ from math import floor
 import pygame
 from pygame import DOUBLEBUF, RESIZABLE, HWSURFACE, QUIT, display, K_ESCAPE, K_F11
 
-import ptext
+from RendererAndPlayer import ptext
 
 pygame.init()
 pygame.font.init()
@@ -23,22 +23,22 @@ screen.fill(background_colour)
 pygame.display.set_caption('ASCII Nova')
 pygame.display.flip()
 
-fps_count_render_font = pygame.font.Font('./fonts/courier.ttf', 16)
-media_controls_render_font = pygame.font.Font('./fonts/courier.ttf', 12)
+fps_count_render_font = pygame.font.Font('../fonts/courier.ttf', 16)
+media_controls_render_font = pygame.font.Font('../fonts/courier.ttf', 12)
 
 clock = pygame.time.Clock()
 
 
 def initializeMediaControls(asciiVideoDict):
     try:
-        file = open("temp/" + asciiVideoDict['filename'] + '_audio_decoded.mp3', 'wb')
+        file = open("../temp/" + asciiVideoDict['filename'] + '_audio_decoded.mp3', 'wb')
         file.write(base64.b64decode(asciiVideoDict['base64Audio']))
         file.close()
     except Exception as e:
         print(e)
         sys.exit(0)
 
-    pygame.mixer.music.load("temp/" + asciiVideoDict['filename'] + '_audio_decoded.mp3')
+    pygame.mixer.music.load("../temp/" + asciiVideoDict['filename'] + '_audio_decoded.mp3')
     pygame.mixer.music.play()
     pygame.mixer.music.set_volume(1.0)
 
@@ -102,8 +102,8 @@ fullScreen = False
 
 
 def renderFramesOnScreen(asciiVideoDict, fontColorHex="#FFFFFF", fontSize=14, lineheight=1, showFpsSwitch=True,
-                         ascii_render_font_name="fonts/courier.ttf"):
-    music_length = pygame.mixer.Sound("temp/" + asciiVideoDict['filename'] + '_audio_decoded.mp3').get_length()
+                         ascii_render_font_name="../fonts/courier.ttf"):
+    music_length = pygame.mixer.Sound("../temp/" + asciiVideoDict['filename'] + '_audio_decoded.mp3').get_length()
     print(music_length)
     FPS_LOCK_VALUE = asciiVideoDict['fps']
     frameIndex = 0
@@ -190,8 +190,11 @@ def renderFramesOnScreen(asciiVideoDict, fontColorHex="#FFFFFF", fontSize=14, li
 
                     # resize screen on key events
                     if event.key == K_ESCAPE and fullScreen:
-                        screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT),
+                        pygame.display.quit()
+                        pygame.init()
+                        screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.RESIZABLE,
                                                          HWSURFACE | DOUBLEBUF | RESIZABLE, vsync=1)
+
                         fullScreen = False
                 if event.type == pygame.MOUSEBUTTONDOWN:
 
@@ -218,4 +221,4 @@ def renderFramesOnScreen(asciiVideoDict, fontColorHex="#FFFFFF", fontSize=14, li
             sys.exit(0)
     finally:
         pygame.mixer.music.unload()
-        os.remove("temp/" + asciiVideoDict['filename'] + '_audio_decoded.mp3')
+        os.remove("../temp/" + asciiVideoDict['filename'] + '_audio_decoded.mp3')

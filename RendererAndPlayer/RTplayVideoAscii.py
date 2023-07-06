@@ -100,7 +100,9 @@ def renderFrames(videoObject):
                         print('K')
                         # resize screen on key events
                     if event.key == K_ESCAPE and fullScreen:
-                        screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT),
+                        pygame.display.quit()
+                        pygame.init()
+                        screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.RESIZABLE,
                                                          HWSURFACE | DOUBLEBUF | RESIZABLE, vsync=1)
                         fullScreen = False
                 if event.type == pygame.MOUSEBUTTONDOWN:
@@ -110,7 +112,7 @@ def renderFrames(videoObject):
                         if pygame.time.get_ticks() - last_click_time < double_click_interval:
                             if not fullScreen:
                                 screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN,
-                                                                 HWSURFACE | DOUBLEBUF | RESIZABLE, vsync=1)
+                                                                 HWSURFACE | DOUBLEBUF, vsync=1)
                                 fullScreen = True
                         last_click_time = pygame.time.get_ticks()
 
