@@ -34,9 +34,9 @@
 # from ImageToAscii import convert_Image_To_Ascii
 #
 # print(convert_Image_To_Ascii("temp/500.jpg", ASCII_CHARS=None))
-import RendererAndPlayer.RTplayVideoAscii as RTplayVideoAscii
-RTplayVideoAscii.videoPath=f"./RendererAndPlayer/BadAppleForPython2.mp4"
-RTplayVideoAscii.RTplayVideoAscii()
+# import RendererAndPlayer.RTplayVideoAscii as RTplayVideoAscii
+# RTplayVideoAscii.videoPath=f"./RendererAndPlayer/BadAppleForPython2.mp4"
+# RTplayVideoAscii.RTplayVideoAscii()
 
 # from tkinter import Tk     # from tkinter import Tk for Python 3.x
 # from tkinter.filedialog import askopenfilename
@@ -61,3 +61,5 @@ stringo = "@  f                 "
 #         break
 #     x += 2
 
+from RendererAndPlayer import AsciiVideoPlayer
+AsciiVideoPlayer.playAsciiVideo("E:\ASCII-Nova Full\BadAppleZero\RendererAndPlayer\BadAppleForPython2.json.gz")

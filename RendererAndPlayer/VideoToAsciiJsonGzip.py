@@ -14,8 +14,6 @@ import sys
 import moviepy.editor as mvEditor
 from RendererAndPlayer import VideoObject
 
-
-
 videoPath = ""
 asciiRenderWidth = 120
 numberOfThreads = 64
@@ -23,7 +21,6 @@ ASCII_CHARS = ["@", "#", "＄", "%", "?", "*", "+", ";", ":", ",", "."]
 
 
 def renderVideoToAsciiJsonGzip(status_bar, progress_bar):
-
     renderedFrames = []
     submittedThreads = []
     videoObject = VideoObject.VideoObject(videoPath)
@@ -52,9 +49,10 @@ def renderVideoToAsciiJsonGzip(status_bar, progress_bar):
     for x in submittedThreads:
         renderedFrames.extend(x.result())
         i += 1
-
-        progress_bar.setProperty("value", round((i / len(submittedThreads)) * 80))
-        print("progress:", round((i / len(submittedThreads)) * 80))
+        value = round((i / len(submittedThreads)) * 80)
+        if value > progress_bar.value():
+            progress_bar.setProperty("value", round(value))
+            print("progress:", round(value))
 
     threadPool.shutdown()
     print(len(renderedFrames))

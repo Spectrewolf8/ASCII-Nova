@@ -8,6 +8,7 @@ from pygame import DOUBLEBUF, RESIZABLE, HWSURFACE, QUIT, display, K_ESCAPE, K_F
 
 from RendererAndPlayer import ptext
 
+
 pygame.init()
 pygame.font.init()
 
@@ -107,7 +108,7 @@ def renderFramesOnScreen(asciiVideoDict, fontColorHex="#FFFFFF", fontSize=14, li
     print(music_length)
     FPS_LOCK_VALUE = asciiVideoDict['fps']
     frameIndex = 0
-
+    pygame.init()
     initializeMediaControls(asciiVideoDict)
     global screen, fullScreen, last_click_time, double_click_interval, SCREEN_WIDTH, SCREEN_HEIGHT
     running = True
@@ -209,7 +210,8 @@ def renderFramesOnScreen(asciiVideoDict, fontColorHex="#FFFFFF", fontSize=14, li
                         last_click_time = pygame.time.get_ticks()
                 # Check for QUIT event
                 if event.type == QUIT:
-                    display.quit()
+                    pygame.display.quit()
+                    return
             if frameIndex >= len(asciiVideoDict['AsciiFrames']):
                 break
     except pygame.error as e:
@@ -222,3 +224,4 @@ def renderFramesOnScreen(asciiVideoDict, fontColorHex="#FFFFFF", fontSize=14, li
     finally:
         pygame.mixer.music.unload()
         os.remove("../temp/" + asciiVideoDict['filename'] + '_audio_decoded.mp3')
+        return

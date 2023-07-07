@@ -48,6 +48,8 @@ videoPath = ""
 def RTplayVideoAscii():
     videoToRenderInAscii = VideoObject(videoPath)
     print(videoToRenderInAscii.path)
+    pygame.init()
+    print("Init")
     renderFrames(videoToRenderInAscii)
 
 
@@ -68,9 +70,9 @@ def renderFrames(videoObject):
 
     global fontColorHex, playback_paused, fontSize, lineHeight, showFpsSwitch, ascii_render_font_name
     global screen, fullScreen, last_click_time, double_click_interval, SCREEN_WIDTH, SCREEN_HEIGHT
+    try:
+        while True:
 
-    while True:
-        try:
             if playback_paused is False:
                 success, frame = capture.read()
                 # print(type(frame), frame)
@@ -118,18 +120,22 @@ def renderFrames(videoObject):
                                 fullScreen = True
                         last_click_time = pygame.time.get_ticks()
 
+                        # Check for QUIT event
+
                 # Check for QUIT event
                 if event.type == QUIT:
-                    display.quit()
-        except pygame.error as e:
-            if e.args[0] == 'video system not initialized':
-                print("Error: Video system not initialized")
-                sys.exit(0)
-            elif e.args[0] == 'display Surface quit':
-                print("Error: Display windows was quit")
-                sys.exit(0)
-    capture.release()
-    print("frames split")
+                    pygame.display.quit()
+                    return
+    except pygame.error as e:
+        if e.args[0] == 'video system not initialized':
+            print("Error: Video system not initialized")
+            sys.exit(0)
+        elif e.args[0] == 'display Surface quit':
+            print("Error: Display windows was quit")
+            sys.exit(0)
+    finally:
+        capture.release()
+        return
 
 
 # incorporated in renderOverlay:
@@ -205,14 +211,6 @@ def renderFrameOnScreen(asciiFrameString, fpsLockValue=30, fontColorHex="#FFFFFF
             render_overlay(showFpsSwitch)
 
             display.flip()  # to update display
-
-        # keys = pygame.key.get_pressed()
-        for event in pygame.event.get():
-            # Check for media control key events
-            pygame.event.pump()
-            # Check for QUIT event
-            if event.type == QUIT:
-                display.quit()
     except pygame.error as e:
         if e.args[0] == 'display Surface quit':
             print("Error: Display windows was quit")

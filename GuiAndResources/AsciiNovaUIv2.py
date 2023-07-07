@@ -2,10 +2,8 @@
 # AsciiNovaUiV2 with minor changes implemented
 import os
 import threading
-
 from PyQt5 import QtCore, QtGui, QtWidgets
 import easygui
-from PyQt5.QtCore import QThread
 from natsort import natsort
 
 
