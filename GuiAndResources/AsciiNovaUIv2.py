@@ -1,13 +1,17 @@
 # Created by: PyQt5 UI code generator 5.15.9
 # AsciiNovaUiV2 with minor changes implemented
 import os
+import threading
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 import easygui
+from PyQt5.QtCore import QThread
 from natsort import natsort
 
 
 class Ui_MainWindow(object):
+    _translate = QtCore.QCoreApplication.translate
+
     def __init__(self):
         self.MainWindow = QtWidgets.QMainWindow()
         self.centralwidget = QtWidgets.QWidget(self.MainWindow)
@@ -405,7 +409,6 @@ class Ui_MainWindow(object):
         self.line_height_doubleSpinBox.setMaximum(2.0)
         self.line_height_doubleSpinBox.setMinimum(0.20)
         self.line_height_doubleSpinBox.setSingleStep(0.1)
-        self.line_height_doubleSpinBox.setProperty("value", 1.0)
         self.line_height_doubleSpinBox.setObjectName("line_height_doubleSpinBox")
         self.line_height_label.setGeometry(QtCore.QRect(30, 291, 81, 30))
         font = QtGui.QFont()
@@ -440,7 +443,6 @@ class Ui_MainWindow(object):
         self.font_size_spinBox.setMinimum(2)
         self.font_size_spinBox.setMaximum(96)
         self.font_size_spinBox.setSingleStep(2)
-        self.font_size_spinBox.setProperty("value", 8)
         self.font_size_spinBox.setObjectName("font_size_spinBox")
         self.font_size_label.setGeometry(QtCore.QRect(30, 357, 71, 30))
         font = QtGui.QFont()
@@ -622,7 +624,6 @@ class Ui_MainWindow(object):
         self.threads_spinBox.setMinimum(1)
         self.threads_spinBox.setMaximum(128)
         self.threads_spinBox.setSingleStep(8)
-        self.threads_spinBox.setProperty("value", 64)
         self.threads_spinBox.setObjectName("threads_spinBox")
         self.render_ascii_btn.setGeometry(QtCore.QRect(30, 531, 150, 91))
         self.render_ascii_btn.setMaximumSize(QtCore.QSize(150, 16777215))
@@ -799,7 +800,6 @@ class Ui_MainWindow(object):
                                               "}\n"
                                               "\n"
                                               "")
-        self.render_progressBar.setProperty("value", 24)
         self.render_progressBar.setObjectName("render_progressBar")
         self.render_chars_lineEdit.setGeometry(QtCore.QRect(30, 318, 501, 31))
         font = QtGui.QFont()
@@ -943,7 +943,6 @@ class Ui_MainWindow(object):
         self.ascii_image_width_spinBox_2.setMinimum(20)
         self.ascii_image_width_spinBox_2.setMaximum(998)
         self.ascii_image_width_spinBox_2.setSingleStep(10)
-        self.ascii_image_width_spinBox_2.setProperty("value", 120)
         self.ascii_image_width_spinBox_2.setObjectName("ascii_image_width_spinBox_2")
         self.path_label_3.setGeometry(QtCore.QRect(30, 50, 191, 30))
         font = QtGui.QFont()
@@ -1220,127 +1219,114 @@ class Ui_MainWindow(object):
         self.horizontalLayout.addWidget(self.main_container)
         self.MainWindow.setCentralWidget(self.centralwidget)
 
-        _translate = QtCore.QCoreApplication.translate
-        self.MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
-        self.home_btn.setToolTip(_translate("MainWindow", "Home"))
-        self.home_btn.setText(_translate("MainWindow", "Home"))
+        self.MainWindow.setWindowTitle(self._translate("MainWindow", "MainWindow"))
+        self.home_btn.setToolTip(self._translate("MainWindow", "Home"))
+        self.home_btn.setText(self._translate("MainWindow", "Home"))
         self.home_btn.clicked.connect(lambda: self.main_continer_stack.setCurrentIndex(0))
 
-        self.play_ascii_video_btn.setToolTip(_translate("MainWindow", "Play"))
-        self.play_ascii_video_btn.setText(_translate("MainWindow", "Play"))
+        self.play_ascii_video_btn.setToolTip(self._translate("MainWindow", "Play"))
+        self.play_ascii_video_btn.setText(self._translate("MainWindow", "Play"))
         self.play_ascii_video_btn.clicked.connect(self.initializeAsciiPlayer)
 
-        self.convert_video_to_ascii_btn.setToolTip(_translate("MainWindow", "Convert"))
-        self.convert_video_to_ascii_btn.setText(_translate("MainWindow", "Convert"))
-        self.convert_video_to_ascii_btn.clicked.connect(lambda: self.main_continer_stack.setCurrentIndex(2))
+        self.convert_video_to_ascii_btn.setToolTip(self._translate("MainWindow", "Convert"))
+        self.convert_video_to_ascii_btn.setText(self._translate("MainWindow", "Convert"))
+        self.convert_video_to_ascii_btn.clicked.connect(self.initializeAsciiRenderer)
 
-        self.realtime_play_btn.setToolTip(_translate("MainWindow", "RealTime player"))
-        self.realtime_play_btn.setText(_translate("MainWindow", "RT_Play"))
+        self.realtime_play_btn.setToolTip(self._translate("MainWindow", "RealTime player"))
+        self.realtime_play_btn.setText(self._translate("MainWindow", "RT_Play"))
         self.realtime_play_btn.clicked.connect(lambda: self.main_continer_stack.setCurrentIndex(3))
 
-        self.help_btn.setToolTip(_translate("MainWindow", "Help"))
-        self.help_btn.setText(_translate("MainWindow", "help"))
+        self.help_btn.setToolTip(self._translate("MainWindow", "Help"))
+        self.help_btn.setText(self._translate("MainWindow", "help"))
         self.help_btn.clicked.connect(lambda: self.main_continer_stack.setCurrentIndex(4))
 
-        self.system_message_label.setToolTip(_translate("MainWindow", "system message bar"))
-        self.home_screen_logo_label.setText(_translate("MainWindow",
-                                                       "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-                                                       "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
-                                                       "p, li { white-space: pre-wrap; }\n"
-                                                       "</style></head><body style=\" font-family:\'Cascadia Code\'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
-                                                       "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Cascadia Code\'; font-size:10pt; font-weight:600;\">      ___           ___           ___                             </span></p>\n"
-                                                       "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:Cascadia Code\'; font-size:10pt; font-weight:600;\">     /\\  \\         /\\  \\         /\\  \\          ___         ___   </span></p>\n"
-                                                       "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Cascadia Code\'; font-size:10pt; font-weight:600;\">    /::\\  \\       /::\\  \\       /::\\  \\        /\\  \\       /\\  \\  </span></p>\n"
-                                                       "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Cascadia Code\'; font-size:10pt; font-weight:600;\">   /:/\\:\\  \\     /:/\\ \\  \\     /:/\\:\\  \\       \\:\\  \\      \\:\\  \\ </span></p>\n"
-                                                       "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Cascadia Code\'; font-size:10pt; font-weight:600;\">  /::\\~\\:\\  \\   _\\:\\~\\ \\  \\   /:/  \\:\\  \\      /::\\__\\     /::\\__\\</span></p>\n"
-                                                       "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Cascadia Code\'; font-size:10pt; font-weight:600;\"> /:/\\:\\ \\:\\__\\ /\\ \\:\\ \\ \\__\\ /:/__/ \\:\\__\\  __/:/\\/__/  __/:/\\/__/</span></p>\n"
-                                                       "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Cascadia Code\'; font-size:10pt; font-weight:600;\"> \\/__\\:\\/:/  / \\:\\ \\:\\ \\/__/ \\:\\  \\  \\/__/ /\\/:/  /    /\\/:/  /   </span></p>\n"
-                                                       "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Cascadia Code\'; font-size:10pt; font-weight:600;\">      \\::/  /   \\:\\ \\:\\__\\    \\:\\  \\       \\::/__/     \\::/__/    </span></p>\n"
-                                                       "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Cascadia Code\'; font-size:10pt; font-weight:600;\">      /:/  /     \\:\\/:/  /     \\:\\  \\       \\:\\__\\      \\:\\__\\    </span></p>\n"
-                                                       "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:Cascadia Code\'; font-size:10pt; font-weight:600;\">     /:/  /       \\::/  /       \\:\\__\\       \\/__/       \\/__/    </span></p>\n"
-                                                       "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Cascadia Code\'; font-size:10pt; font-weight:600;\">     \\/__/         \\/__/         \\/__/                            </span></p>\n"
-                                                       "<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:\'Cascadia Code\'; font-size:10pt; font-weight:600;\"><br /></p>\n"
-                                                       "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Cascadia Code\'; font-size:10pt; font-weight:600;\">     ___           ___           ___           ___     </span></p>\n"
-                                                       "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Cascadia Code\'; font-size:10pt; font-weight:600;\">    /\\__\\         /\\  \\         /\\__\\         /\\  \\    </span></p>\n"
-                                                       "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Cascadia Code\'; font-size:10pt; font-weight:600;\">   /::|  |       /::\\  \\       /:/  /        /::\\  \\   </span></p>\n"
-                                                       "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Cascadia Code\'; font-size:10pt; font-weight:600;\">  /:|:|  |      /:/\\:\\  \\     /:/  /        /:/\\:\\  \\  </span></p>\n"
-                                                       "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Cascadia Code\'; font-size:10pt; font-weight:600;\"> /:/|:|  |__   /:/  \\:\\  \\   /:/__/  ___   /::\\~\\:\\  \\ </span></p>\n"
-                                                       "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Cascadia Code\'; font-size:10pt; font-weight:600;\">/:/ |:| /\\__\\ /:/__/ \\:\\__\\  |:|  | /\\__\\ /:/\\:\\ \\:\\__\\</span></p>\n"
-                                                       "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Cascadia Code\'; font-size:10pt; font-weight:600;\">\\/__|:|/:/  / \\:\\  \\ /:/  /  |:|  |/:/  / \\/__\\:\\/:/  /</span></p>\n"
-                                                       "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Cascadia Code\'; font-size:10pt; font-weight:600;\">    |:/:/  /   \\:\\  /:/  /   |:|__/:/  /       \\::/  / </span></p>\n"
-                                                       "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Cascadia Code\'; font-size:10pt; font-weight:600;\">    |::/  /     \\:\\/:/  /     \\::::/__/        /:/  /  </span></p>\n"
-                                                       "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Cascadia Code\'; font-size:10pt; font-weight:600;\">    /:/  /       \\::/  /       ~~~~           /:/  /   </span></p>\n"
-                                                       "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Cascadia Code\'; font-size:10pt; font-weight:600;\">    \\/__/         \\/__/                       \\/__/    </span></p></body></html>"))
-        self.home_screen_text_label.setText(_translate("MainWindow",
-                                                       "<html><head/><body><p align=\"center\"><span style=\" font-weight:600;\">ASCII Nova:</span> a lightweight and open source ASCII video              renderer and player</p></body></html>"))
-        self.windows_title_label.setText(_translate("MainWindow", "ASCII player"))
-        self.path_textBrowser.setHtml(_translate("MainWindow",
-                                                 "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-                                                 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
-                                                 "p, li { white-space: pre-wrap; }\n"
-                                                 "</style></head><body style=\" font-family:\'MS Shell Dlg 2\'; font-size:8.25pt; font-weight:400; font-style:normal;\">\n"
-                                                 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Noto Sans Medium\'; font-size:12pt;\">Path</span></p></body></html>"))
-        self.browse_file_btn.setText(_translate("MainWindow", "Browse File"))
-        self.path_label.setText(_translate("MainWindow", "JSON gzip file location:"))
-        self.render_font_label.setText(_translate("MainWindow", "Render Font:"))
-        self.line_height_label.setText(_translate("MainWindow", "Line Height:"))
-        self.font_size_label.setText(_translate("MainWindow", "Font Size:"))
-        self.show_fps_checkBox.setText(_translate("MainWindow", "Show FPS*"))
-        self.show_fps_checkBox.setChecked(True)
-        self.render_color_hex_lineEdit.setText(_translate("MainWindow", "#FFFFFF"))
-        self.render_color_hex_label.setText(_translate("MainWindow", "Render Color Hex:"))
-        self.start_playing_ascii_video_btn.setText(_translate("MainWindow", "Play Ascii Video!"))
-        self.path_textBrowser_2.setHtml(_translate("MainWindow",
-                                                   "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-                                                   "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
-                                                   "p, li { white-space: pre-wrap; }\n"
-                                                   "</style></head><body style=\" font-family:\'MS Shell Dlg 2\'; font-size:8.25pt; font-weight:400; font-style:normal;\">\n"
-                                                   "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Noto Sans Medium\'; font-size:12pt;\">Path</span></p></body></html>"))
-        self.render_chars_label.setText(_translate("MainWindow", "Render CHARS:"))
-        self.render_ascii_btn.setText(_translate("MainWindow", "Render!"))
-        self.threads_label.setText(_translate("MainWindow", "Threads:"))
-        self.path_label_2.setText(_translate("MainWindow", "mp4 file location:"))
-        self.ascii_image_width_label.setText(_translate("MainWindow", "Rendered ASCII image width:"))
-        self.windows_title_label_2.setText(_translate("MainWindow", "ASCII Renderer"))
-        self.browse_file_btn_2.setText(_translate("MainWindow", "Browse mp4 File"))
-        self.message_label_2.setText(_translate("MainWindow", "status: waiting for start"))
+        self.system_message_label.setToolTip(self._translate("MainWindow", "system message bar"))
+        self.home_screen_logo_label.setText(self._translate("MainWindow",
+                                                            "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+                                                            "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+                                                            "p, li { white-space: pre-wrap; }\n"
+                                                            "</style></head><body style=\" font-family:\'Cascadia Code\'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
+                                                            "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Cascadia Code\'; font-size:10pt; font-weight:600;\">      ___           ___           ___                             </span></p>\n"
+                                                            "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:Cascadia Code\'; font-size:10pt; font-weight:600;\">     /\\  \\         /\\  \\         /\\  \\          ___         ___   </span></p>\n"
+                                                            "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Cascadia Code\'; font-size:10pt; font-weight:600;\">    /::\\  \\       /::\\  \\       /::\\  \\        /\\  \\       /\\  \\  </span></p>\n"
+                                                            "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Cascadia Code\'; font-size:10pt; font-weight:600;\">   /:/\\:\\  \\     /:/\\ \\  \\     /:/\\:\\  \\       \\:\\  \\      \\:\\  \\ </span></p>\n"
+                                                            "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Cascadia Code\'; font-size:10pt; font-weight:600;\">  /::\\~\\:\\  \\   _\\:\\~\\ \\  \\   /:/  \\:\\  \\      /::\\__\\     /::\\__\\</span></p>\n"
+                                                            "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Cascadia Code\'; font-size:10pt; font-weight:600;\"> /:/\\:\\ \\:\\__\\ /\\ \\:\\ \\ \\__\\ /:/__/ \\:\\__\\  __/:/\\/__/  __/:/\\/__/</span></p>\n"
+                                                            "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Cascadia Code\'; font-size:10pt; font-weight:600;\"> \\/__\\:\\/:/  / \\:\\ \\:\\ \\/__/ \\:\\  \\  \\/__/ /\\/:/  /    /\\/:/  /   </span></p>\n"
+                                                            "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Cascadia Code\'; font-size:10pt; font-weight:600;\">      \\::/  /   \\:\\ \\:\\__\\    \\:\\  \\       \\::/__/     \\::/__/    </span></p>\n"
+                                                            "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Cascadia Code\'; font-size:10pt; font-weight:600;\">      /:/  /     \\:\\/:/  /     \\:\\  \\       \\:\\__\\      \\:\\__\\    </span></p>\n"
+                                                            "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:Cascadia Code\'; font-size:10pt; font-weight:600;\">     /:/  /       \\::/  /       \\:\\__\\       \\/__/       \\/__/    </span></p>\n"
+                                                            "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Cascadia Code\'; font-size:10pt; font-weight:600;\">     \\/__/         \\/__/         \\/__/                            </span></p>\n"
+                                                            "<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:\'Cascadia Code\'; font-size:10pt; font-weight:600;\"><br /></p>\n"
+                                                            "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Cascadia Code\'; font-size:10pt; font-weight:600;\">     ___           ___           ___           ___     </span></p>\n"
+                                                            "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Cascadia Code\'; font-size:10pt; font-weight:600;\">    /\\__\\         /\\  \\         /\\__\\         /\\  \\    </span></p>\n"
+                                                            "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Cascadia Code\'; font-size:10pt; font-weight:600;\">   /::|  |       /::\\  \\       /:/  /        /::\\  \\   </span></p>\n"
+                                                            "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Cascadia Code\'; font-size:10pt; font-weight:600;\">  /:|:|  |      /:/\\:\\  \\     /:/  /        /:/\\:\\  \\  </span></p>\n"
+                                                            "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Cascadia Code\'; font-size:10pt; font-weight:600;\"> /:/|:|  |__   /:/  \\:\\  \\   /:/__/  ___   /::\\~\\:\\  \\ </span></p>\n"
+                                                            "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Cascadia Code\'; font-size:10pt; font-weight:600;\">/:/ |:| /\\__\\ /:/__/ \\:\\__\\  |:|  | /\\__\\ /:/\\:\\ \\:\\__\\</span></p>\n"
+                                                            "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Cascadia Code\'; font-size:10pt; font-weight:600;\">\\/__|:|/:/  / \\:\\  \\ /:/  /  |:|  |/:/  / \\/__\\:\\/:/  /</span></p>\n"
+                                                            "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Cascadia Code\'; font-size:10pt; font-weight:600;\">    |:/:/  /   \\:\\  /:/  /   |:|__/:/  /       \\::/  / </span></p>\n"
+                                                            "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Cascadia Code\'; font-size:10pt; font-weight:600;\">    |::/  /     \\:\\/:/  /     \\::::/__/        /:/  /  </span></p>\n"
+                                                            "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Cascadia Code\'; font-size:10pt; font-weight:600;\">    /:/  /       \\::/  /       ~~~~           /:/  /   </span></p>\n"
+                                                            "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Cascadia Code\'; font-size:10pt; font-weight:600;\">    \\/__/         \\/__/                       \\/__/    </span></p></body></html>"))
+        self.home_screen_text_label.setText(self._translate("MainWindow",
+                                                            "<html><head/><body><p align=\"center\"><span style=\" font-weight:600;\">ASCII Nova:</span> a lightweight and open source ASCII video              renderer and player</p></body></html>"))
+        self.windows_title_label.setText(self._translate("MainWindow", "ASCII player"))
+
+        self.browse_file_btn.setText(self._translate("MainWindow", "Browse File"))
+        self.path_label.setText(self._translate("MainWindow", "JSON gzip file location:"))
+        self.render_font_label.setText(self._translate("MainWindow", "Render Font:"))
+        self.line_height_label.setText(self._translate("MainWindow", "Line Height:"))
+        self.font_size_label.setText(self._translate("MainWindow", "Font Size:"))
+        self.show_fps_checkBox.setText(self._translate("MainWindow", "Show FPS*"))
+        self.render_color_hex_label.setText(self._translate("MainWindow", "Render Color Hex:"))
+        self.start_playing_ascii_video_btn.setText(self._translate("MainWindow", "Play Ascii Video!"))
+
+        self.render_chars_label.setText(self._translate("MainWindow", "Render CHARS:"))
+        self.render_ascii_btn.setText(self._translate("MainWindow", "Render!"))
+        self.threads_label.setText(self._translate("MainWindow", "Threads:"))
+        self.path_label_2.setText(self._translate("MainWindow", "mp4 file location:"))
+        self.ascii_image_width_label.setText(self._translate("MainWindow", "Rendered ASCII image width:"))
+        self.windows_title_label_2.setText(self._translate("MainWindow", "ASCII Renderer"))
+        self.browse_file_btn_2.setText(self._translate("MainWindow", "Browse mp4 File"))
         self.render_ascii_image_width_warning_label.setText(
-            _translate("MainWindow", "⚠️ Height calculated using width. Aspect-ratio preserved. Defaults to 120 chars"))
-        self.threads_warning_label.setText(_translate("MainWindow",
-                                                      "⚠️Defines number of threads to use for render. More threads mean lesser time and more CPU load"))
-        self.render_chars_warning_label.setText(_translate("MainWindow",
-                                                           "⚠️Choose the character for ASCII video render. 11 characters SEPARATED BY A WHITESPACE must be chosen. String structure MUST NOT BE ALTERED."))
-        self.status_label.setText(_translate("MainWindow", "status:"))
-        self.render_chars_lineEdit.setText(_translate("MainWindow", "@ # ＄ % ? * + ; : , ."))
-        self.render_chars_lineEdit_2.setText(_translate("MainWindow", "@ # ＄ % ? * + ; : , ."))
-        self.browse_file_btn_3.setText(_translate("MainWindow", "Browse mp4 File"))
-        self.ascii_image_width_label_2.setText(_translate("MainWindow", "Rendered ASCII image width:"))
-        self.path_textBrowser_3.setHtml(_translate("MainWindow",
-                                                   "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-                                                   "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
-                                                   "p, li { white-space: pre-wrap; }\n"
-                                                   "</style></head><body style=\" font-family:\'MS Shell Dlg 2\'; font-size:8.25pt; font-weight:400; font-style:normal;\">\n"
-                                                   "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Noto Sans Medium\'; font-size:12pt;\">Path</span></p></body></html>"))
-        self.render_chars_label_2.setText(_translate("MainWindow", "Render CHARS:"))
-        self.rt_play_btn.setText(_translate("MainWindow", "Play!"))
-        self.path_label_3.setText(_translate("MainWindow", "mp4 file location:"))
+            self._translate("MainWindow",
+                            "⚠️ Height calculated using width. Aspect-ratio preserved. Defaults to 120 chars"))
+        self.threads_warning_label.setText(self._translate("MainWindow",
+                                                           "⚠️Defines number of threads to use for render. More threads mean lesser time and more CPU load"))
+        self.render_chars_warning_label.setText(self._translate("MainWindow",
+                                                                "⚠️Choose the character for ASCII video render. 11 characters SEPARATED BY A WHITESPACE must be chosen. String structure MUST NOT BE ALTERED."))
+        self.status_label.setText(self._translate("MainWindow", "status:"))
+        self.render_chars_lineEdit_2.setText(self._translate("MainWindow", "@ # ＄ % ? * + ; : , ."))
+        self.browse_file_btn_3.setText(self._translate("MainWindow", "Browse mp4 File"))
+        self.ascii_image_width_label_2.setText(self._translate("MainWindow", "Rendered ASCII image width:"))
+        self.path_textBrowser_3.setHtml(self._translate("MainWindow",
+                                                        "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+                                                        "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+                                                        "p, li { white-space: pre-wrap; }\n"
+                                                        "</style></head><body style=\" font-family:\'MS Shell Dlg 2\'; font-size:8.25pt; font-weight:400; font-style:normal;\">\n"
+                                                        "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Noto Sans Medium\'; font-size:12pt;\">Path</span></p></body></html>"))
+        self.render_chars_label_2.setText(self._translate("MainWindow", "Render CHARS:"))
+        self.rt_play_btn.setText(self._translate("MainWindow", "Play!"))
+        self.path_label_3.setText(self._translate("MainWindow", "mp4 file location:"))
         self.ascii_image_width_warning_label.setText(
-            _translate("MainWindow", "⚠️ Height calculated using width. Aspect-ratio preserved. Defaults to 120 chars"))
-        self.render_color_hex_lineEdit_2.setText(_translate("MainWindow", "#FFFFFF"))
-        self.render_color_hex_label_2.setText(_translate("MainWindow", "Render Color Hex:"))
-        self.font_size_label_2.setText(_translate("MainWindow", "Font Size:"))
-        self.show_fps_checkBox_2.setText(_translate("MainWindow", "Show FPS*"))
+            self._translate("MainWindow",
+                            "⚠️ Height calculated using width. Aspect-ratio preserved. Defaults to 120 chars"))
+        self.render_color_hex_lineEdit_2.setText(self._translate("MainWindow", "#FFFFFF"))
+        self.render_color_hex_label_2.setText(self._translate("MainWindow", "Render Color Hex:"))
+        self.font_size_label_2.setText(self._translate("MainWindow", "Font Size:"))
+        self.show_fps_checkBox_2.setText(self._translate("MainWindow", "Show FPS*"))
         self.show_fps_checkBox_2.setChecked(True)
-        self.render_font_label_2.setText(_translate("MainWindow", "Render Font:"))
-        self.line_height_label_2.setText(_translate("MainWindow", "Line Height:"))
-        self.windows_title_label_3.setText(_translate("MainWindow", "ASCII Realtime Player"))
-        self.rt_play_warning_label.setText(_translate("MainWindow",
-                                                      "⚠️ RT play warning: RT play renders and plays frames in realtime. Expect potential CPU load and lag."))
-        self.render_chars_warning_label_2.setText(_translate("MainWindow",
-                                                             "⚠️Choose the character for ASCII video render. 11 characters SEPARATED BY A WHITESPACE must be chosen. String structure MUST NOT BE ALTERED."))
-        self.render_color_hex_label_3.setText(_translate("MainWindow", "Render Color Hex:"))
-        self.help_label.setText(_translate("MainWindow",
-                                           "You can get support and help on ASCII nova\'s <a href=\"https://github.com/Spectrewolf8/ASCII-Nova\">github page</a>"))
+        self.render_font_label_2.setText(self._translate("MainWindow", "Render Font:"))
+        self.line_height_label_2.setText(self._translate("MainWindow", "Line Height:"))
+        self.windows_title_label_3.setText(self._translate("MainWindow", "ASCII Realtime Player"))
+        self.rt_play_warning_label.setText(self._translate("MainWindow",
+                                                           "⚠️ RT play warning: RT play renders and plays frames in realtime. Expect potential CPU load and lag."))
+        self.render_chars_warning_label_2.setText(self._translate("MainWindow",
+                                                                  "⚠️Choose the character for ASCII video render. 11 characters SEPARATED BY A WHITESPACE must be chosen. String structure MUST NOT BE ALTERED."))
+        self.render_color_hex_label_3.setText(self._translate("MainWindow", "Render Color Hex:"))
+        self.help_label.setText(self._translate("MainWindow",
+                                                "You can get support and help on ASCII nova\'s <a href=\"https://github.com/Spectrewolf8/ASCII-Nova\">github page</a>"))
 
         self.main_continer_stack.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(self.MainWindow)
@@ -1351,6 +1337,9 @@ class Ui_MainWindow(object):
         # Ascii player
         self.browse_file_btn.clicked.connect(self.browseFileForAsciiPlayer)
         self.start_playing_ascii_video_btn.clicked.connect(self.playAsciiVideo)
+        # Ascii renderer
+        self.browse_file_btn_2.clicked.connect(self.browseFileForAsciiRenderer)
+        self.render_ascii_btn.clicked.connect(self.renderAsciiVideo)
 
     # methods associated with events
 
@@ -1359,6 +1348,16 @@ class Ui_MainWindow(object):
         fonts = os.listdir("../fonts")
         fonts = natsort.natsorted(fonts, reverse=False)
         self.choose_fontComboBox.addItems(fonts)
+        self.line_height_doubleSpinBox.setProperty("value", 1.0)
+        self.font_size_spinBox.setProperty("value", 8)
+        self.render_color_hex_lineEdit.setText(self._translate("MainWindow", "#FFFFFF"))
+        self.show_fps_checkBox.setChecked(True)
+        self.path_textBrowser.setHtml(self._translate("MainWindow",
+                                                      "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+                                                      "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+                                                      "p, li { white-space: pre-wrap; }\n"
+                                                      "</style></head><body style=\" font-family:\'MS Shell Dlg 2\'; font-size:8.25pt; font-weight:400; font-style:normal;\">\n"
+                                                      "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Noto Sans Medium\'; font-size:12pt;\">Path</span></p></body></html>"))
         self.main_continer_stack.setCurrentIndex(1)
 
     def browseFileForAsciiPlayer(self):
@@ -1366,12 +1365,21 @@ class Ui_MainWindow(object):
                                        filetypes=["*.json.gz"], default="*.json.gz", multiple=False)
 
         self.system_message_label.setText("No system message yet...")
-
-        if filepath.endswith(".json.gz"):
-            self.path_textBrowser.setText(filepath)
+        if filepath is None:
+            self.path_textBrowser.setHtml(self._translate("MainWindow",
+                                                          "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+                                                          "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+                                                          "p, li { white-space: pre-wrap; }\n"
+                                                          "</style></head><body style=\" font-family:\'MS Shell Dlg 2\'; font-size:8.25pt; font-weight:400; font-style:normal;\">\n"
+                                                          "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Noto Sans Medium\'; font-size:12pt;\">Path</span></p></body></html>"))
+            filepath = self.path_textBrowser.toPlainText()
         else:
-            self.system_message_label.setText("Invalid file: The file path does not have the '.json.gz' extension.")
-            self.path_textBrowser.setText("")
+            if filepath.endswith(".json.gz"):
+
+                self.path_textBrowser.setText(filepath)
+            else:
+                self.system_message_label.setText("Invalid file: The file path does not have the '.json.gz' extension.")
+                self.path_textBrowser.setText("")
 
         print(filepath)
 
@@ -1388,6 +1396,99 @@ class Ui_MainWindow(object):
             AsciiVideoPlayer.font = "../fonts/" + self.choose_fontComboBox.currentText()
             AsciiVideoPlayer.showFpsSwitch = self.show_fps_checkBox.isChecked()
             AsciiVideoPlayer.playAsciiVideo(self.path_textBrowser.toPlainText())
+
+    # Ascii renderer
+    def initializeAsciiRenderer(self):
+        self.path_textBrowser_2.setHtml(self._translate("MainWindow",
+                                                        "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+                                                        "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+                                                        "p, li { white-space: pre-wrap; }\n"
+                                                        "</style></head><body style=\" font-family:\'MS Shell Dlg 2\'; font-size:8.25pt; font-weight:400; font-style:normal;\">\n"
+                                                        "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Noto Sans Medium\'; font-size:12pt;\">Path</span></p></body></html>"))
+        self.ascii_image_width_spinBox_2.setProperty("value", 120)
+        self.render_chars_lineEdit.setText(self._translate("MainWindow", "@ # ＄ % ? * + ; : , ."))
+        self.threads_spinBox.setProperty("value", 64)
+        self.message_label_2.setText(self._translate("MainWindow", "status: waiting for start"))
+        self.render_progressBar.setProperty("value", 0)
+        self.system_message_label.setText("No system message yet...")
+        self.main_continer_stack.setCurrentIndex(2)
+
+    def browseFileForAsciiRenderer(self):
+        filepath = easygui.fileopenbox("Choose a json.gz file to Render in ascii", "ASCII Nova",
+                                       filetypes=["*.mp4"], default="*.mp4", multiple=False)
+
+        self.system_message_label.setText("No system message yet...")
+        if filepath is None:
+            self.path_textBrowser_2.setHtml(self._translate("MainWindow",
+                                                            "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+                                                            "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+                                                            "p, li { white-space: pre-wrap; }\n"
+                                                            "</style></head><body style=\" font-family:\'MS Shell Dlg 2\'; font-size:8.25pt; font-weight:400; font-style:normal;\">\n"
+                                                            "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Noto Sans Medium\'; font-size:12pt;\">Path</span></p></body></html>"))
+            filepath = self.path_textBrowser_2.toPlainText()
+        else:
+            if filepath.endswith(".mp4"):
+                self.path_textBrowser_2.setText(filepath)
+            else:
+                self.system_message_label.setText("Invalid file: The file path does not have the '.mp4' extension.")
+                self.path_textBrowser.setText("")
+
+        print(filepath)
+
+    def renderAsciiVideo(self):
+        if self.path_textBrowser_2.toPlainText() == "Path" or self.path_textBrowser_2.toPlainText() == "":
+            self.system_message_label.setText("No file selected. Please select a file.")
+        else:
+            renderChars = self.render_chars_lineEdit.text()
+            if len(renderChars) != 21:
+                self.system_message_label.setText(
+                    "Invalid render characters format: The render characters string must be 21 characters long, with all the characters separated by a whitespace.")
+            else:
+                x = 1
+                while x < len(renderChars):
+                    if renderChars[x] == " ":
+                        pass
+                    else:
+                        self.system_message_label.setText(
+                            "Invalid render characters format: The render characters string must be 21 characters long, with all the characters separated by a whitespace.")
+                        return
+                    x += 2
+                print("Correct format")
+
+                # self.render_chars_lineEdit,self.path_textBrowser_2, self.message_label_2,self.render_progressBar,self.threads_spinBox, self.ascii_image_width_spinBox
+                video_thread = self.VideoToAsciiJsonGzipThread(self.render_chars_lineEdit, self.path_textBrowser_2,
+                                                               self.message_label_2, self.render_progressBar,
+                                                               self.threads_spinBox,
+                                                               self.ascii_image_width_spinBox)
+
+                # Create a new thread and start it
+                thread = threading.Thread(target=video_thread.run)
+                thread.start()
+
+    class VideoToAsciiJsonGzipThread():
+
+        def __init__(self, render_chars_lineEdit, path_textBrowser_2, message_label_2, render_progressBar,
+                     threads_spinBox, ascii_image_width_spinBox):
+            self.render_chars_lineEdit = render_chars_lineEdit
+            self.path_textBrowser_2 = path_textBrowser_2
+            self.message_label_2 = message_label_2
+            self.render_progressBar = render_progressBar
+            self.threads_spinBox = threads_spinBox
+            self.ascii_image_width_spinBox = ascii_image_width_spinBox
+
+        def run(self):
+            print("Starting render OO")
+
+            from RendererAndPlayer import VideoToAsciiJsonGzip
+
+            renderChars = self.render_chars_lineEdit.text()
+            VideoToAsciiJsonGzip.videoPath = self.path_textBrowser_2.toPlainText()
+            VideoToAsciiJsonGzip.ASCII_CHARS = renderChars.split(" ")
+            VideoToAsciiJsonGzip.numberOfThreads = self.threads_spinBox.value()
+            VideoToAsciiJsonGzip.asciiRenderWidth = self.ascii_image_width_spinBox.value()
+            print("Starting render")
+
+            VideoToAsciiJsonGzip.renderVideoToAsciiJsonGzip(self.message_label_2, self.render_progressBar)
 
 
 import AsciiNovaUIResources_rc

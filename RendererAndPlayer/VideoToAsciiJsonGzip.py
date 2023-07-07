@@ -2,20 +2,36 @@ import os
 import shutil
 import time
 from concurrent.futures import ThreadPoolExecutor
+
+import PyQt5
 import cv2
+from PyQt5 import QtWidgets
 from natsort import natsort
-import ImageToAscii
+from RendererAndPlayer import ImageToAscii
 import compress_json
 import base64
 import sys
 import moviepy.editor as mvEditor
+from RendererAndPlayer import VideoObject
 
 
-def renderVideoToAsciiJson(videoObject, asciiRenderWidth=None, numberOfThreads=1, ASCII_CHARS=None):
+
+videoPath = ""
+asciiRenderWidth = 120
+numberOfThreads = 64
+ASCII_CHARS = ["@", "#", "＄", "%", "?", "*", "+", ";", ":", ",", "."]
+
+
+def renderVideoToAsciiJsonGzip(status_bar, progress_bar):
+
     renderedFrames = []
     submittedThreads = []
+    videoObject = VideoObject.VideoObject(videoPath)
 
+    status_bar.setText('Splitting Frames')
     splitVideoIntoFrames(videoObject)
+    status_bar.setText('Rendering Frames')
+    progress_bar.setProperty("value", 10)
 
     threadPool = ThreadPoolExecutor(numberOfThreads)
     tempFrames = os.listdir("../temp")
@@ -36,13 +52,19 @@ def renderVideoToAsciiJson(videoObject, asciiRenderWidth=None, numberOfThreads=1
     for x in submittedThreads:
         renderedFrames.extend(x.result())
         i += 1
-        print("progress:", round((i / len(submittedThreads)) * 100))
+
+        progress_bar.setProperty("value", round((i / len(submittedThreads)) * 80))
+        print("progress:", round((i / len(submittedThreads)) * 80))
 
     threadPool.shutdown()
     print(len(renderedFrames))
     videoObject.frames = renderedFrames
+    status_bar.setText('Rendering Audio')
     videoObject.base64Audio = renderBase64Audio(videoObject).decode('utf-8')
+    status_bar.setText('Compressing to Json Gzip')
+    progress_bar.setProperty("value", 90)
     makeJsonGzip(videoObject)
+    progress_bar.setProperty("value", 100)
 
 
 def renderFramesToAscii(submittedFrames, asciiRenderWidth, ASCII_CHARS=None):
@@ -63,11 +85,9 @@ def splitVideoIntoFrames(videoObject):
         shutil.rmtree('../temp')
     os.mkdir('../temp')
     capture = cv2.VideoCapture(videoObject.path)
-    print(videoObject.path)
     frameNr = 0
     while True:
         success, frame = capture.read()
-        print(type(frame), frame)
         if success:
             cv2.imwrite(f'../temp/{frameNr}.jpg', frame)
 
@@ -85,6 +105,7 @@ def splitFramesList(framesList, number_of_parts_to_split_in=1):
 
 
 def renderBase64Audio(videoObject):
+    print(videoObject.path)
     video = mvEditor.VideoFileClip(videoObject.path)
     video.audio.write_audiofile("../temp/" + videoObject.filename + "_audio.mp3")
 
@@ -105,7 +126,6 @@ def makeJsonGzip(videoObjectToWrite):
         'AsciiFrames': videoObjectToWrite.frames,
         'fps': videoObjectToWrite.fps,
         'renderChars': videoObjectToWrite.renderChars,
-        'renderTextWidth': videoObjectToWrite.renderTextWidth,
         'base64Audio': videoObjectToWrite.base64Audio
     }
 
