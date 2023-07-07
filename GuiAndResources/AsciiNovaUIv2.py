@@ -727,7 +727,6 @@ class Ui_MainWindow(object):
         self.ascii_image_width_spinBox.setMinimum(20)
         self.ascii_image_width_spinBox.setMaximum(998)
         self.ascii_image_width_spinBox.setSingleStep(10)
-        self.ascii_image_width_spinBox.setProperty("value", 120)
         self.ascii_image_width_spinBox.setObjectName("ascii_image_width_spinBox")
         self.render_ascii_image_width_warning_label.setGeometry(QtCore.QRect(370, 190, 201, 80))
         font = QtGui.QFont()
@@ -1004,7 +1003,6 @@ class Ui_MainWindow(object):
         self.font_size_spinBox_2.setMinimum(2)
         self.font_size_spinBox_2.setMaximum(96)
         self.font_size_spinBox_2.setSingleStep(2)
-        self.font_size_spinBox_2.setProperty("value", 8)
         self.font_size_spinBox_2.setObjectName("font_size_spinBox_2")
         self.render_color_hex_label_2.setGeometry(QtCore.QRect(221, 478, 121, 30))
         font = QtGui.QFont()
@@ -1053,7 +1051,6 @@ class Ui_MainWindow(object):
                                                        "")
         self.line_height_doubleSpinBox_2.setMaximum(2.0)
         self.line_height_doubleSpinBox_2.setSingleStep(0.1)
-        self.line_height_doubleSpinBox_2.setProperty("value", 1.0)
         self.line_height_doubleSpinBox_2.setObjectName("line_height_doubleSpinBox_2")
         self.render_font_label_2.setGeometry(QtCore.QRect(30, 421, 91, 30))
         font = QtGui.QFont()
@@ -1297,26 +1294,17 @@ class Ui_MainWindow(object):
         self.render_chars_warning_label.setText(self._translate("MainWindow",
                                                                 "⚠️Choose the character for ASCII video render. 11 characters SEPARATED BY A WHITESPACE must be chosen. String structure MUST NOT BE ALTERED."))
         self.status_label.setText(self._translate("MainWindow", "status:"))
-        self.render_chars_lineEdit_2.setText(self._translate("MainWindow", "@ # ＄ % ? * + ; : , ."))
         self.browse_file_btn_3.setText(self._translate("MainWindow", "Browse mp4 File"))
         self.ascii_image_width_label_2.setText(self._translate("MainWindow", "Rendered ASCII image width:"))
-        self.path_textBrowser_3.setHtml(self._translate("MainWindow",
-                                                        "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-                                                        "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
-                                                        "p, li { white-space: pre-wrap; }\n"
-                                                        "</style></head><body style=\" font-family:\'MS Shell Dlg 2\'; font-size:8.25pt; font-weight:400; font-style:normal;\">\n"
-                                                        "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Noto Sans Medium\'; font-size:12pt;\">Path</span></p></body></html>"))
         self.render_chars_label_2.setText(self._translate("MainWindow", "Render CHARS:"))
         self.rt_play_btn.setText(self._translate("MainWindow", "Play!"))
         self.path_label_3.setText(self._translate("MainWindow", "mp4 file location:"))
         self.ascii_image_width_warning_label.setText(
             self._translate("MainWindow",
                             "⚠️ Height calculated using width. Aspect-ratio preserved. Defaults to 120 chars"))
-        self.render_color_hex_lineEdit_2.setText(self._translate("MainWindow", "#FFFFFF"))
         self.render_color_hex_label_2.setText(self._translate("MainWindow", "Render Color Hex:"))
         self.font_size_label_2.setText(self._translate("MainWindow", "Font Size:"))
         self.show_fps_checkBox_2.setText(self._translate("MainWindow", "Show FPS*"))
-        self.show_fps_checkBox_2.setChecked(True)
         self.render_font_label_2.setText(self._translate("MainWindow", "Render Font:"))
         self.line_height_label_2.setText(self._translate("MainWindow", "Line Height:"))
         self.windows_title_label_3.setText(self._translate("MainWindow", "ASCII Realtime Player"))
@@ -1340,6 +1328,10 @@ class Ui_MainWindow(object):
         # Ascii renderer
         self.browse_file_btn_2.clicked.connect(self.browseFileForAsciiRenderer)
         self.render_ascii_btn.clicked.connect(self.renderAsciiVideo)
+        # Realtime ASCII player
+        self.browse_file_btn_3.clicked.connect(self.browseFileForRTAsciiPlayer)
+        self.realtime_play_btn.clicked.connect(self.initializeRTAsciiPlayer)
+        self.rt_play_btn.clicked.connect(self.startRTAsciiPlayer)
 
     # methods associated with events
 
@@ -1375,11 +1367,9 @@ class Ui_MainWindow(object):
             filepath = self.path_textBrowser.toPlainText()
         else:
             if filepath.endswith(".json.gz"):
-
                 self.path_textBrowser.setText(filepath)
             else:
                 self.system_message_label.setText("Invalid file: The file path does not have the '.json.gz' extension.")
-                self.path_textBrowser.setText("")
 
         print(filepath)
 
@@ -1405,7 +1395,7 @@ class Ui_MainWindow(object):
                                                         "p, li { white-space: pre-wrap; }\n"
                                                         "</style></head><body style=\" font-family:\'MS Shell Dlg 2\'; font-size:8.25pt; font-weight:400; font-style:normal;\">\n"
                                                         "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Noto Sans Medium\'; font-size:12pt;\">Path</span></p></body></html>"))
-        self.ascii_image_width_spinBox_2.setProperty("value", 120)
+        self.ascii_image_width_spinBox.setProperty("value", 120)
         self.render_chars_lineEdit.setText(self._translate("MainWindow", "@ # ＄ % ? * + ; : , ."))
         self.threads_spinBox.setProperty("value", 64)
         self.message_label_2.setText(self._translate("MainWindow", "status: waiting for start"))
@@ -1414,7 +1404,7 @@ class Ui_MainWindow(object):
         self.main_continer_stack.setCurrentIndex(2)
 
     def browseFileForAsciiRenderer(self):
-        filepath = easygui.fileopenbox("Choose a json.gz file to Render in ascii", "ASCII Nova",
+        filepath = easygui.fileopenbox("Choose a mp4 file to Render in ascii", "ASCII Nova",
                                        filetypes=["*.mp4"], default="*.mp4", multiple=False)
 
         self.system_message_label.setText("No system message yet...")
@@ -1431,7 +1421,6 @@ class Ui_MainWindow(object):
                 self.path_textBrowser_2.setText(filepath)
             else:
                 self.system_message_label.setText("Invalid file: The file path does not have the '.mp4' extension.")
-                self.path_textBrowser.setText("")
 
         print(filepath)
 
@@ -1454,7 +1443,7 @@ class Ui_MainWindow(object):
                         return
                     x += 2
                 print("Correct format")
-
+                renderChars = renderChars.split(" ")
                 # self.render_chars_lineEdit,self.path_textBrowser_2, self.message_label_2,self.render_progressBar,self.threads_spinBox, self.ascii_image_width_spinBox
                 video_thread = self.VideoToAsciiJsonGzipThread(self.render_chars_lineEdit, self.path_textBrowser_2,
                                                                self.message_label_2, self.render_progressBar,
@@ -1465,6 +1454,78 @@ class Ui_MainWindow(object):
                 thread = threading.Thread(target=video_thread.run)
                 thread.start()
 
+        # Realtime Ascii Player
+
+    def browseFileForRTAsciiPlayer(self):
+        filepath = easygui.fileopenbox("Choose a mp4 file to Render in ascii", "ASCII Nova",
+                                       filetypes=["*.mp4"], default="*.mp4", multiple=False)
+
+        self.system_message_label.setText("No system message yet...")
+        if filepath is None:
+            self.path_textBrowser_3.setHtml(self._translate("MainWindow",
+                                                            "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+                                                            "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+                                                            "p, li { white-space: pre-wrap; }\n"
+                                                            "</style></head><body style=\" font-family:\'MS Shell Dlg 2\'; font-size:8.25pt; font-weight:400; font-style:normal;\">\n"
+                                                            "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Noto Sans Medium\'; font-size:12pt;\">Path</span></p></body></html>"))
+            filepath = self.path_textBrowser_3.toPlainText()
+        else:
+            if filepath.endswith(".mp4"):
+                self.path_textBrowser_3.setText(filepath)
+            else:
+                self.system_message_label.setText("Invalid file: The file path does not have the '.mp4' extension.")
+
+        print(filepath)
+
+    def initializeRTAsciiPlayer(self):
+        fonts = os.listdir("../fonts")
+        fonts = natsort.natsorted(fonts, reverse=False)
+        self.choose_fontComboBox_2.addItems(fonts)
+        self.path_textBrowser_3.setHtml(self._translate("MainWindow",
+                                                        "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+                                                        "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+                                                        "p, li { white-space: pre-wrap; }\n"
+                                                        "</style></head><body style=\" font-family:\'MS Shell Dlg 2\'; font-size:8.25pt; font-weight:400; font-style:normal;\">\n"
+                                                        "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Noto Sans Medium\'; font-size:12pt;\">Path</span></p></body></html>"))
+        self.ascii_image_width_spinBox_2.setProperty("value", 120)
+        self.render_chars_lineEdit_2.setText(self._translate("MainWindow", "@ # ＄ % ? * + ; : , ."))
+        self.show_fps_checkBox_2.setChecked(True)
+        self.render_color_hex_lineEdit_2.setText(self._translate("MainWindow", "#FFFFFF"))
+        self.line_height_doubleSpinBox_2.setProperty("value", 1.0)
+        self.font_size_spinBox_2.setProperty("value", 8)
+        self.main_continer_stack.setCurrentIndex(3)
+
+    def startRTAsciiPlayer(self):
+        if self.path_textBrowser_3.toPlainText() == "Path" or self.path_textBrowser_3.toPlainText() == "":
+            self.system_message_label.setText("No file selected. Please select a file.")
+        else:
+            renderChars = self.render_chars_lineEdit_2.text()
+            if len(renderChars) != 21:
+                self.system_message_label.setText(
+                    "Invalid render characters format: The render characters string must be 21 characters long, with all the characters separated by a whitespace.")
+            else:
+                x = 1
+                while x < len(renderChars):
+                    if renderChars[x] == " ":
+                        pass
+                    else:
+                        self.system_message_label.setText(
+                            "Invalid render characters format: The render characters string must be 21 characters long, with all the characters separated by a whitespace.")
+                        return
+                    x += 2
+                print("Correct format")
+                from RendererAndPlayer import RTplayVideoAscii
+                RTplayVideoAscii.fontColorHex = self.render_color_hex_lineEdit_2.text()
+                RTplayVideoAscii.fontSize = self.font_size_spinBox_2.value()
+                RTplayVideoAscii.lineHeight = self.line_height_doubleSpinBox_2.value()
+                RTplayVideoAscii.showFpsSwitch = self.show_fps_checkBox_2.isChecked()
+                RTplayVideoAscii.ascii_render_font_name = "../fonts/" + self.choose_fontComboBox_2.currentText()
+                RTplayVideoAscii.ascii_Chars = renderChars.split(" ")
+                RTplayVideoAscii.renderTextWidth = self.ascii_image_width_spinBox_2.value()
+                RTplayVideoAscii.videoPath = self.path_textBrowser_3.toPlainText()
+                RTplayVideoAscii.RTplayVideoAscii()
+
+    # A class to render the video in a separate thread
     class VideoToAsciiJsonGzipThread():
 
         def __init__(self, render_chars_lineEdit, path_textBrowser_2, message_label_2, render_progressBar,

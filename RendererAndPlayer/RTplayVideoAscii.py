@@ -24,8 +24,8 @@ screen.fill(background_colour)
 pygame.display.set_caption('ASCII Nova')
 pygame.display.flip()
 
-fps_count_render_font = pygame.font.Font('./fonts/courier.ttf', 16)
-media_controls_render_font = pygame.font.Font('./fonts/courier.ttf', 12)
+fps_count_render_font = pygame.font.Font('../fonts/courier.ttf', 16)
+media_controls_render_font = pygame.font.Font('../fonts/courier.ttf', 12)
 
 clock = pygame.time.Clock()
 
@@ -38,13 +38,15 @@ fontColorHex = "#FFFFFF"
 fontSize = 14
 lineHeight = 1
 showFpsSwitch = True
-ascii_render_font_name = "fonts/courier.ttf"
+ascii_render_font_name = "./fonts/courier.ttf"
 ascii_Chars = ['@', '#', 'S', '%', '?', '*', '+', ';', ':', ',', '.']
+renderTextWidth = 120
+videoPath = ""
 
 
 ######################
-def RTplayVideoAscii(videoPath, renderWidth):
-    videoToRenderInAscii = VideoObject(videoPath, renderWidth)
+def RTplayVideoAscii():
+    videoToRenderInAscii = VideoObject(videoPath)
     print(videoToRenderInAscii.path)
     renderFrames(videoToRenderInAscii)
 
@@ -73,12 +75,12 @@ def renderFrames(videoObject):
                 success, frame = capture.read()
                 # print(type(frame), frame)
                 if success:
-                    cv2.imwrite(f'temp/{frameNr}.jpg', frame)
-                    frame = ImageToAscii.convert_Image_To_Ascii(f'temp/{frameNr}.jpg', videoObject.renderTextWidth,
+                    cv2.imwrite(f'../temp/{frameNr}.jpg', frame)
+                    frame = ImageToAscii.convert_Image_To_Ascii(f'../temp/{frameNr}.jpg', renderTextWidth,
                                                                 ASCII_CHARS=ascii_Chars)
                     renderFrameOnScreen(frame, videoObject.fps, fontColorHex, fontSize, lineHeight, showFpsSwitch,
                                         ascii_render_font_name)
-                    os.remove(f'temp/{frameNr}.jpg')
+                    os.remove(f'../temp/{frameNr}.jpg')
                 else:
                     break
 
