@@ -1378,12 +1378,14 @@ class Ui_MainWindow(object):
         else:
 
             from RendererAndPlayer import AsciiVideoPlayer
-            AsciiVideoPlayer.lineHeight = self.line_height_doubleSpinBox.value()
-            AsciiVideoPlayer.fontSize = self.font_size_spinBox.value()
-            AsciiVideoPlayer.fontColorHex = self.render_color_hex_lineEdit.text()
-            AsciiVideoPlayer.font = "../fonts/" + self.choose_fontComboBox.currentText()
-            AsciiVideoPlayer.showFpsSwitch = self.show_fps_checkBox.isChecked()
-            AsciiVideoPlayer.playAsciiVideo(self.path_textBrowser.toPlainText())
+            AsciiVideoPlayerObject = AsciiVideoPlayer.AsciiVideoPlayer()
+            AsciiVideoPlayerObject.lineHeight = self.line_height_doubleSpinBox.value()
+            AsciiVideoPlayerObject.fontSize = self.font_size_spinBox.value()
+            AsciiVideoPlayerObject.fontColorHex = self.render_color_hex_lineEdit.text()
+            AsciiVideoPlayerObject.font = "../fonts/" + self.choose_fontComboBox.currentText()
+            AsciiVideoPlayerObject.showFpsSwitch = self.show_fps_checkBox.isChecked()
+            AsciiVideoPlayerObject.playAsciiVideo(self.path_textBrowser.toPlainText())
+            del AsciiVideoPlayerObject
 
     # Ascii renderer
     def initializeAsciiRenderer(self):
@@ -1446,7 +1448,8 @@ class Ui_MainWindow(object):
                 video_thread = self.VideoToAsciiJsonGzipThread(self.render_chars_lineEdit, self.path_textBrowser_2,
                                                                self.message_label_2, self.render_progressBar,
                                                                self.threads_spinBox,
-                                                               self.ascii_image_width_spinBox)
+                                                               self.ascii_image_width_spinBox,
+                                                               self.system_message_label)
 
                 # Create a new thread and start it
                 thread = threading.Thread(target=video_thread.run)
@@ -1512,28 +1515,31 @@ class Ui_MainWindow(object):
                         return
                     x += 2
                 print("Correct format")
-                from RendererAndPlayer import RTplayVideoAscii
-                RTplayVideoAscii.fontColorHex = self.render_color_hex_lineEdit_2.text()
-                RTplayVideoAscii.fontSize = self.font_size_spinBox_2.value()
-                RTplayVideoAscii.lineHeight = self.line_height_doubleSpinBox_2.value()
-                RTplayVideoAscii.showFpsSwitch = self.show_fps_checkBox_2.isChecked()
-                RTplayVideoAscii.ascii_render_font_name = "../fonts/" + self.choose_fontComboBox_2.currentText()
-                RTplayVideoAscii.ascii_Chars = renderChars.split(" ")
-                RTplayVideoAscii.renderTextWidth = self.ascii_image_width_spinBox_2.value()
-                RTplayVideoAscii.videoPath = self.path_textBrowser_3.toPlainText()
-                RTplayVideoAscii.RTplayVideoAscii()
+                from RendererAndPlayer.RTplayVideoAscii import RealTimeAsciiVideoPlayer
+                RealTimeAsciiVideoPlayerObject = RealTimeAsciiVideoPlayer()
+                RealTimeAsciiVideoPlayerObject.fontColorHex = self.render_color_hex_lineEdit_2.text()
+                RealTimeAsciiVideoPlayerObject.fontSize = self.font_size_spinBox_2.value()
+                RealTimeAsciiVideoPlayerObject.lineHeight = self.line_height_doubleSpinBox_2.value()
+                RealTimeAsciiVideoPlayerObject.showFpsSwitch = self.show_fps_checkBox_2.isChecked()
+                RealTimeAsciiVideoPlayerObject.ascii_render_font_name = "../fonts/" + self.choose_fontComboBox_2.currentText()
+                RealTimeAsciiVideoPlayerObject.ascii_Chars = renderChars.split(" ")
+                RealTimeAsciiVideoPlayerObject.renderTextWidth = self.ascii_image_width_spinBox_2.value()
+                RealTimeAsciiVideoPlayerObject.videoPath = self.path_textBrowser_3.toPlainText()
+                RealTimeAsciiVideoPlayerObject.RTplayVideoAscii()
+                del RealTimeAsciiVideoPlayerObject
 
     # A class to render the video in a separate thread
     class VideoToAsciiJsonGzipThread():
 
         def __init__(self, render_chars_lineEdit, path_textBrowser_2, message_label_2, render_progressBar,
-                     threads_spinBox, ascii_image_width_spinBox):
+                     threads_spinBox, ascii_image_width_spinBox, system_message_label):
             self.render_chars_lineEdit = render_chars_lineEdit
             self.path_textBrowser_2 = path_textBrowser_2
             self.message_label_2 = message_label_2
             self.render_progressBar = render_progressBar
             self.threads_spinBox = threads_spinBox
             self.ascii_image_width_spinBox = ascii_image_width_spinBox
+            self.system_message_label = system_message_label
 
         def run(self):
             print("Starting render OO")
@@ -1548,6 +1554,10 @@ class Ui_MainWindow(object):
             print("Starting render")
 
             VideoToAsciiJsonGzip.renderVideoToAsciiJsonGzip(self.message_label_2, self.render_progressBar)
+
+            self.system_message_label.setText(
+                "Rendering complete: Rendered file saved to " + os.path.abspath(
+                    self.path_textBrowser_2.toPlainText()).replace(".mp4", ".json.gz"))
 
 
 import AsciiNovaUIResources_rc
