@@ -11,5 +11,4 @@ class VideoObject:
         self.fps = float(cap.get(cv2.CAP_PROP_FPS))
         self.frames = []
         self.renderChars = ''
-        # self.renderTextWidth = int(renderTextWidth)
         self.base64Audio = ''

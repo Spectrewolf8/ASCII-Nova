@@ -958,13 +958,15 @@ def draw(text, pos=None, **kwargs):
         clean()
     return tsurf, pos
 
+
 # modified by spec for according to need, rest of Ptext is left as original
-def draw_in_exact_center(text, screen, xoffset, yoffset, pos=None , **kwargs):
+def draw_in_exact_center(text, screen, xoffset, yoffset, pos=None, **kwargs):
     options = _DrawOptions(pos=pos, **kwargs)
     tsurf = getsurf(text, **options.togetsurfoptions())
     pos = _blitpos(options.angle, options.pos, options.anchor, tsurf.get_size(), text)
     if options.surf is not None:
-        options.surf.blit(tsurf, tsurf.get_rect(center=(screen.get_rect().centerx+xoffset,screen.get_rect().centery+yoffset)))
+        options.surf.blit(tsurf, tsurf.get_rect(
+            center=(screen.get_rect().centerx + xoffset, screen.get_rect().centery + yoffset)))
     if AUTO_CLEAN:
         clean()
     return tsurf, pos

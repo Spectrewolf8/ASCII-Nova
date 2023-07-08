@@ -133,22 +133,6 @@ class RealTimeAsciiVideoPlayer():
             capture.release()
             return
 
-    # incorporated in renderOverlay:
-    # def show_fps(showFpsSwitch=True):
-    #     if showFpsSwitch is True:
-    #         fps_text = str(int(clock.get_fps()))
-    #         fps_surface = fps_count_render_font.render('', showFpsSwitch, (255, 255, 255))
-    #         fps_surface.fill(background_colour)
-    #         fps_surface = fps_count_render_font.render(('fps: ' + fps_text), showFpsSwitch, (255, 255, 255))
-    #         screen.blit(fps_surface, fps_surface.get_rect())
-    #
-    #
-    # def showMediaControls():
-    #     media_controls_surface = media_controls_render_font.render(
-    #         'K - Pause/Unpause', True,
-    #         (255, 255, 255))
-    #     screen.blit(media_controls_surface, (screen.get_rect().left, 12.5))
-
     def render_overlay(self, show_fps_switch=True):
         if show_fps_switch:
             overlay_surface = pygame.Surface((140, 40))
