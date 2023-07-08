@@ -1555,6 +1555,7 @@ class Ui_MainWindow(object):
 
             VideoToAsciiJsonGzip.renderVideoToAsciiJsonGzip(self.message_label_2, self.render_progressBar)
 
+
             self.system_message_label.setText(
                 "Rendering complete: Rendered file saved to " + os.path.abspath(
                     self.path_textBrowser_2.toPlainText()).replace(".mp4", ".json.gz"))
