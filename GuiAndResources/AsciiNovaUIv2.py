@@ -1335,7 +1335,7 @@ class Ui_MainWindow(object):
 
     # Ascii player
     def initializeAsciiPlayer(self):
-        fonts = os.listdir("../fonts")
+        fonts = os.listdir("../fonts[place fonts to use here]")
         fonts = natsort.natsorted(fonts, reverse=False)
         self.choose_fontComboBox.addItems(fonts)
         self.line_height_doubleSpinBox.setProperty("value", 1.0)
@@ -1382,7 +1382,7 @@ class Ui_MainWindow(object):
             AsciiVideoPlayerObject.lineHeight = self.line_height_doubleSpinBox.value()
             AsciiVideoPlayerObject.fontSize = self.font_size_spinBox.value()
             AsciiVideoPlayerObject.fontColorHex = self.render_color_hex_lineEdit.text()
-            AsciiVideoPlayerObject.font = "../fonts/" + self.choose_fontComboBox.currentText()
+            AsciiVideoPlayerObject.font = "../fonts[place fonts to use here]/" + self.choose_fontComboBox.currentText()
             AsciiVideoPlayerObject.showFpsSwitch = self.show_fps_checkBox.isChecked()
             AsciiVideoPlayerObject.playAsciiVideo(self.path_textBrowser.toPlainText())
             del AsciiVideoPlayerObject
@@ -1479,7 +1479,7 @@ class Ui_MainWindow(object):
         print(filepath)
 
     def initializeRTAsciiPlayer(self):
-        fonts = os.listdir("../fonts")
+        fonts = os.listdir("../fonts[place fonts to use here]")
         fonts = natsort.natsorted(fonts, reverse=False)
         self.choose_fontComboBox_2.addItems(fonts)
         self.path_textBrowser_3.setHtml(self._translate("MainWindow",
@@ -1521,7 +1521,7 @@ class Ui_MainWindow(object):
                 RealTimeAsciiVideoPlayerObject.fontSize = self.font_size_spinBox_2.value()
                 RealTimeAsciiVideoPlayerObject.lineHeight = self.line_height_doubleSpinBox_2.value()
                 RealTimeAsciiVideoPlayerObject.showFpsSwitch = self.show_fps_checkBox_2.isChecked()
-                RealTimeAsciiVideoPlayerObject.ascii_render_font_name = "../fonts/" + self.choose_fontComboBox_2.currentText()
+                RealTimeAsciiVideoPlayerObject.ascii_render_font_name = "../fonts[place fonts to use here]/" + self.choose_fontComboBox_2.currentText()
                 RealTimeAsciiVideoPlayerObject.ascii_Chars = renderChars.split(" ")
                 RealTimeAsciiVideoPlayerObject.renderTextWidth = self.ascii_image_width_spinBox_2.value()
                 RealTimeAsciiVideoPlayerObject.videoPath = self.path_textBrowser_3.toPlainText()
@@ -1554,7 +1554,6 @@ class Ui_MainWindow(object):
             print("Starting render")
 
             VideoToAsciiJsonGzip.renderVideoToAsciiJsonGzip(self.message_label_2, self.render_progressBar)
-
 
             self.system_message_label.setText(
                 "Rendering complete: Rendered file saved to " + os.path.abspath(

@@ -24,8 +24,8 @@ screen.fill(background_colour)
 pygame.display.set_caption('ASCII Nova')
 pygame.display.flip()
 
-fps_count_render_font = pygame.font.Font('../fonts/courier.ttf', 16)
-media_controls_render_font = pygame.font.Font('../fonts/courier.ttf', 12)
+fps_count_render_font = pygame.font.Font('../fonts[place fonts to use here]/courier.ttf', 16)
+media_controls_render_font = pygame.font.Font('../fonts[place fonts to use here]/courier.ttf', 12)
 
 clock = pygame.time.Clock()
 
@@ -103,7 +103,7 @@ fullScreen = False
 
 
 def renderFramesOnScreen(asciiVideoDict, fontColorHex="#FFFFFF", fontSize=14, lineheight=1, showFpsSwitch=True,
-                         ascii_render_font_name="../fonts/courier.ttf"):
+                         ascii_render_font_name="../fonts[place fonts to use here]/courier.ttf"):
     music_length = pygame.mixer.Sound("../temp/" + asciiVideoDict['filename'] + '_audio_decoded.mp3').get_length()
     print(music_length)
     FPS_LOCK_VALUE = asciiVideoDict['fps']
